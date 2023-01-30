@@ -17,8 +17,8 @@ recorded and displayed, as well as the top score.
 ## Targeted Users
 
 The game application is designed for individuals who need a small break and are in the mood for a lighthearted game
-session. The game is not too serious but those who wants to be a little bit more competitive, can easily do so by trying
-to obtain the top score.
+session. The game is not too serious but those who wants to be a more competitive can easily do so by trying to obtain
+the top score.
 
 ## My Interest in this Project
 
@@ -29,8 +29,8 @@ in CPSC110.
 
 ## User Stories
 
-- As a user, I want to be able to move the snake.
+- As a user, I want to be able to add a snake game to a list of snake games played.
 - As a user, I want to be able to pick up apples and see the score.
 - As a user, I want to be able to extend the snake.
-- As a user, I want to be able to move the snake faster as the score increases.
+- As a user, I want to be able to speed up the snake as the score increases.
 - As a user, I want to be able to see the history of games played.
