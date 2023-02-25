@@ -36,7 +36,7 @@ public class Hand {
     public boolean hasBlackjack() {
         for (Card c : hand) {
             if (c.getRank() == 1) {
-                return getValue() + 10 == 21l;
+                return getValue() + 10 == 21;
             }
         }
         return false;
