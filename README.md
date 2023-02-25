@@ -1,36 +1,45 @@
-# Snake
+# Blackjack
 
 ## Introduction
 
-Welcome to Snake, a classic 2D arcade game where the player controls a snake to eat food and grow in length. The goal is
-to collect as much as food possible while avoid running into the walls or the snake's own tail. When a piece of food is
-collected, the score increases and the snake speeds up. This game application will have options for players to customize
-their game, such as changing the theme, the color of the snake, the speed, etc. Their history of past games will also be
-recorded and displayed, as well as the top score.
+Welcome to Blackjack, a classical playing card game that is the most widely played casino banking game. The objective 
+of the game is to win obtain the highest balance possible by obtaining a blackjack or creating a hand that is higher in 
+value than the dealer's hand, but not exceeding 21. The dealer will be an AI that acts exactly the same as a casino 
+dealer, in which the dealer will draw until the dealer's hand is at least 17 in value.
 
 ## How to Play
-1. Use arrow keys or WASD to control the snake movement
-2. Eat food to grow the snake and increment the score
-3. Avoid running into the walls or the snake's tail
-4. The game is over when the snake crashes into a wall or its own tail
+
+1. Bet
+2. Hit or stand
+3. Wait for the dealer's turn
+4. Repeat
 
 ## Targeted Users
 
 The game application is designed for individuals who need a small break and are in the mood for a lighthearted game
-session. The game is not too serious but those who wants to be a more competitive can easily do so by trying to obtain
-the top score.
+session. The game is not too serious but those who wants to be a more competitive can easily do so by trying to obtain 
+the highest balance possible.
 
 ## My Interest in this Project
 
-This project is important to me as a developer because classic arcade game has always been nostalgic to me. It is a
-genre of games that is short and simple yet fascinating and competitive at times. It has a special place in my heart. I 
-would also like to create a game application that has an ui interface, something that is uncommon in what we have done
-in CPSC110.
+This project is important to me as a developer because playing card games have always been nostalgic to me. They are the
+perfect activities to get closer to friends and family. I was exposed to a lot as a kid and has always been in love with
+it. It is something I am very passionate and so is coding, therefore this project is also a passion work.
 
 ## User Stories
 
-- As a user, I want to be able to add a snake game to a list of snake games played.
-- As a user, I want to be able to pick up apples and see the score.
-- As a user, I want to be able to extend the snake.
-- As a user, I want to be able to speed up the snake as the score increases.
-- As a user, I want to be able to see the history of games played.
+- As a user, I want to be able to have a new deck of 52 cards.
+- As a user, I want to be able to have a hand and draw from the deck.
+- As a user, I want to be able to bet against a dealer.
+- As a user, I want to be able to win or lose against a dealer.
+- As a user, I want to be able to repeat the blackjack cycle until I am broke or satisfy.
+
+## To Do
+
+- Clean up code
+- Clean up console ui
+- Add method specifications
+- Add tests
+- Add multiplayer
+- Add GUI
+- Add Baccarat and/or Pok Deng and potentially turn application into Playing Cards Simulator
