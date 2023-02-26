@@ -1,35 +1,30 @@
 package model;
 
-import java.util.ArrayList;
+// Represents a player in a game of blackjack
+public class Player extends Hand {
+    private int balance;
 
-public class Player {
-    private static final int STARTING_BALANCE = 1000;
-
-    int balance;
-    Hand hand;
-
-    public Player() {
-        balance = STARTING_BALANCE;
-        hand = new Hand();
+    // REQUIRES: initialAmount > 0
+    // EFFECTS: initialize balance with n
+    public Player(int initialAmount) {
+        balance = initialAmount;
     }
 
+    // EFFECTS: return balance
     public int getBalance() {
         return balance;
     }
 
-    public Hand getHand() {
-        return hand;
+    // MODIFIES: this
+    // EFFECTS: add amount to balance
+    public void addBalance(int amount) {
+        balance += amount;
     }
 
-    public void addBalance(int n) {
-        balance += n;
-    }
-
-    public void subBalance(int n) {
-        balance -= n;
-    }
-
-    public void emptyHand() {
-        hand = new Hand();
+    // REQUIRES: balance > 0
+    // MODIFIES: this
+    // EFFECTS: subtract amount from balance
+    public void subBalance(int amount) {
+        balance -= amount;
     }
 }

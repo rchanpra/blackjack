@@ -29,17 +29,14 @@ it. It is something I am very passionate and so is coding, therefore this projec
 ## User Stories
 
 - As a user, I want to be able to have a new deck of 52 cards.
-- As a user, I want to be able to have a hand and draw from the deck.
-- As a user, I want to be able to bet against a dealer.
-- As a user, I want to be able to win or lose against a dealer.
+- As a user, I want to be able to draw cards from the deck and add them to my hand.
+- As a user, I want to be able to have a balance that I can add to and subtract from.
+- As a user, I want to be able to bet against a dealer and have payouts.
 - As a user, I want to be able to repeat the blackjack cycle until I am broke or satisfy.
 
 ## To Do
 
-- Clean up code
-- Clean up console ui
-- Add method specifications
-- Add tests
+- Add more decisions
 - Add multiplayer
 - Add GUI
 - Add Baccarat and/or Pok Deng and potentially turn application into Playing Cards Simulator

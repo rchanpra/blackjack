@@ -2,9 +2,11 @@ package model;
 
 import java.util.ArrayList;
 
+// Represents ranks in a deck of cards
 public class Ranks {
     private final ArrayList<String> ranks;
 
+    // EFFECTS: initialize ranks and add appropriate card ranks in an appropriate order
     public Ranks() {
         ranks = new ArrayList<>();
         ranks.add("0");
@@ -23,6 +25,7 @@ public class Ranks {
         ranks.add("K");
     }
 
+    // EFFECTS: return ranks
     public ArrayList<String> getRanks() {
         return ranks;
     }
