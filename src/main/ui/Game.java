@@ -95,8 +95,8 @@ public class Game {
     // EFFECTS: reset deck and hands
     private void reset() {
         deck.reset();
-        dealer.emptyHand();
-        player.emptyHand();
+        dealer.reset();
+        player.reset();
     }
 
     // MODIFIES: this

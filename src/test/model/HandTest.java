@@ -14,6 +14,7 @@ public class HandTest {
     private Card card4;
     private Card card5;
     private Card card6;
+    private Card card7;
 
     @BeforeEach
     public void runBefore() {
@@ -24,6 +25,7 @@ public class HandTest {
         card4 = new Card(1, 2);
         card5 = new Card(1, 3);
         card6 = new Card(11, 3);
+        card7 = new Card(4, 2);
     }
 
     @Test
@@ -50,6 +52,10 @@ public class HandTest {
         hand.draw(card1);
         hand.draw(card2);
         assertEquals("AC 7H (8/18)", hand.getHandString());
+        hand.reset();
+        hand.draw(card3);
+        hand.draw(card2);
+        assertEquals("KS 7H (17)", hand.getHandString());
     }
 
     @Test
@@ -63,10 +69,11 @@ public class HandTest {
     }
 
     @Test
-    public void testEmptyHand() {
+    public void testReset() {
         hand.draw(card1);
-        hand.emptyHand();
+        hand.reset();
         assertEquals(0, hand.getHand().size());
+        assertEquals(0, hand.getValue());
     }
 
     @Test
@@ -89,6 +96,14 @@ public class HandTest {
         assertTrue(hand.hasBlackjack());
         hand.draw(card2);
         assertFalse(hand.hasBlackjack());
+        hand.reset();
+        assertFalse(hand.hasBlackjack());
+        hand.draw(card7);
+        assertFalse(hand.hasBlackjack());
+        hand.draw(card2);
+        assertFalse(hand.hasBlackjack());
+        hand.draw(card1);
+        assertFalse(hand.hasBlackjack());
     }
 
     @Test
@@ -104,10 +119,24 @@ public class HandTest {
         assertFalse(hand.has5CardCharlie());
         hand.draw(card5);
         assertTrue(hand.has5CardCharlie());
+        hand.reset();
+        assertFalse(hand.has5CardCharlie());
+        hand.draw(card1);
+        assertFalse(hand.has5CardCharlie());
+        hand.draw(card2);
+        assertFalse(hand.has5CardCharlie());
+        hand.draw(card3);
+        assertFalse(hand.has5CardCharlie());
+        hand.draw(card4);
+        assertFalse(hand.has5CardCharlie());
+        hand.draw(card6);
+        assertFalse(hand.has5CardCharlie());
     }
 
     @Test
     public void hasAce() {
+        assertFalse(hand.hasAce());
+        hand.draw(card2);
         assertFalse(hand.hasAce());
         hand.draw(card1);
         assertTrue(hand.hasAce());

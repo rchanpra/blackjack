@@ -44,9 +44,10 @@ public class Hand {
     }
 
     // MODIFIES: this
-    // EFFECTS: reinitialize hand
-    public void emptyHand() {
+    // EFFECTS: reinitialize hand and value
+    public void reset() {
         hand = new ArrayList<>();
+        value = 0;
     }
 
     // EFFECTS: return true if value is greater than 21 else false
