@@ -52,10 +52,8 @@ public class HandTest {
         hand.draw(card1);
         hand.draw(card2);
         assertEquals("AC 7H (8/18)", hand.getHandString());
-        hand.reset();
         hand.draw(card3);
-        hand.draw(card2);
-        assertEquals("KS 7H (17)", hand.getHandString());
+        assertEquals("AC 7H KS (18)", hand.getHandString());
     }
 
     @Test
@@ -103,6 +101,14 @@ public class HandTest {
         hand.draw(card2);
         assertFalse(hand.hasBlackjack());
         hand.draw(card1);
+        assertFalse(hand.hasBlackjack());
+        hand.reset();
+        assertFalse(hand.hasBlackjack());
+        hand.draw(card1);
+        assertFalse(hand.hasBlackjack());
+        hand.draw(card2);
+        assertFalse(hand.hasBlackjack());
+        hand.draw(card3);
         assertFalse(hand.hasBlackjack());
     }
 
