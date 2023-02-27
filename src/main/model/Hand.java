@@ -30,7 +30,7 @@ public class Hand {
             result += card.getCard() + " ";
         }
         result += "(" + value;
-        if (hasAce() && value <= 11) {
+        if (hasAdjustableAce()) {
             result += "/" + (value + 10);
         }
         return result + ")";
@@ -73,5 +73,10 @@ public class Hand {
             }
         }
         return false;
+    }
+
+    // EFFECTS: return true if hand has an ace and hand value is 11 or less else false
+    public boolean hasAdjustableAce() {
+        return hasAce() && value <= 11;
     }
 }

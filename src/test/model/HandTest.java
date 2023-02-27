@@ -113,7 +113,7 @@ public class HandTest {
     }
 
     @Test
-    public void has5CardCharlie() {
+    public void testHas5CardCharlie() {
         assertFalse(hand.has5CardCharlie());
         hand.draw(card1);
         assertFalse(hand.has5CardCharlie());
@@ -140,11 +140,22 @@ public class HandTest {
     }
 
     @Test
-    public void hasAce() {
+    public void testHasAce() {
         assertFalse(hand.hasAce());
         hand.draw(card2);
         assertFalse(hand.hasAce());
         hand.draw(card1);
         assertTrue(hand.hasAce());
+    }
+
+    @Test
+    public void testHasAdjustableAce() {
+        assertFalse(hand.hasAdjustableAce());
+        hand.draw(card2);
+        assertFalse(hand.hasAdjustableAce());
+        hand.draw(card1);
+        assertTrue(hand.hasAdjustableAce());
+        hand.draw(card3);
+        assertFalse(hand.hasAdjustableAce());
     }
 }

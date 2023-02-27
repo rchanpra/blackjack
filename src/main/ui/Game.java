@@ -82,10 +82,10 @@ public class Game {
     private int playerWinsViaValue() {
         int playerHandValue = player.getValue();
         int dealerHandValue = dealer.getValue();
-        if (player.hasAce() && playerHandValue <= 11) {
+        if (player.hasAdjustableAce()) {
             playerHandValue += 10;
         }
-        if (dealer.hasAce() && dealerHandValue <= 11) {
+        if (dealer.hasAdjustableAce()) {
             dealerHandValue += 10;
         }
         return Integer.compare(playerHandValue, dealerHandValue);
