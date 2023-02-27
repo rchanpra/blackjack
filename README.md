@@ -7,12 +7,16 @@ of the game is to win obtain the highest balance possible by obtaining a blackja
 value than the dealer's hand, but not exceeding 21. The dealer will be an AI that acts exactly the same as a casino 
 dealer, in which the dealer will draw until the dealer's hand is at least 17 in value.
 
-## How to Play
+## Blackjack Ruling
+- Decisions are hit, stand, and double down.
+- Blackjack is the strongest, followed by 5-card Charlie, and then normal hand.
+- Winnings are 2 times the bet.
 
+## How to Play
 1. Bet
-2. Hit or stand
+2. Inspect cards dealt and make decisions
 3. Wait for the dealer's turn
-4. Repeat
+4. Repeat until broke or satisfy
 
 ## Targeted Users
 
@@ -23,20 +27,20 @@ the highest balance possible.
 ## My Interest in this Project
 
 This project is important to me as a developer because playing card games have always been nostalgic to me. They are the
-perfect activities to get closer to friends and family. I was exposed to a lot as a kid and has always been in love with
-it. It is something I am very passionate and so is coding, therefore this project is also a passion work.
+perfect activities to get closer to friends and family. I was exposed to a lot of playing card games as a kid and as a 
+result, I am rather passionate about it. Therefore, this project could also be considered a passion work.
 
 ## User Stories
 
-- As a user, I want to be able to have a new deck of 52 cards.
+- As a user, I want to be able to have a deck of 52 unique cards.
 - As a user, I want to be able to draw cards from the deck and add them to my hand.
 - As a user, I want to be able to have a balance that I can add to and subtract from.
-- As a user, I want to be able to bet against a dealer and have payouts.
-- As a user, I want to be able to repeat the blackjack cycle until I am broke or satisfy.
+- As a user, I want to be able to bet against a dealer, win/lose/tie, and have payouts.
+- As a user, I want to be able to repeat the rounds of blackjack until I am broke or satisfy.
 
-## To Do
+## Upcoming Updates
 
-- Add more decisions
+- Add split and surrender as decisions
 - Add multiplayer
 - Add GUI
 - Add Baccarat and/or Pok Deng and potentially turn application into Playing Cards Simulator
