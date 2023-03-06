@@ -37,6 +37,8 @@ result, I am rather passionate about it. Therefore, this project could also be c
 - As a user, I want to be able to have a balance that I can add to and subtract from.
 - As a user, I want to be able to bet against a dealer, win/lose/tie, and have payouts.
 - As a user, I want to be able to repeat the rounds of blackjack until I am broke or satisfy.
+- As a user, when I want to quit the application, I want to be able to save my player name and balance to file.
+- As a user, when I start the application, I want to be given the option to load my player name and balance from file.
 
 ## Upcoming Updates
 
