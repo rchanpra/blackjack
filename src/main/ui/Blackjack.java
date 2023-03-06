@@ -3,56 +3,115 @@ package ui;
 import model.Dealer;
 import model.Deck;
 import model.Player;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 // Represents a game of blackjack
-public class Game {
+public class Blackjack {
+    private static final String JSON_STORE = "./data/blackjack.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
     private Scanner input;
     private Deck deck;
     private Dealer dealer;
     private Player player;
 
-    // EFFECTS: initialize deck, dealer, input, and player with initialBalance
-    public Game(int initialBalance) {
+    // EFFECTS: initialize deck, dealer, and player then run
+    public Blackjack() {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        input = new Scanner(System.in);
         deck = new Deck();
         dealer = new Dealer();
-        player = new Player(initialBalance);
-        input = new Scanner(System.in);
+        startMenu();
+        run();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: construct new player or load player
+    private void startMenu() {
+        while (true) {
+            System.out.println("\nSelect from:");
+            System.out.println("\tn -> new game");
+            System.out.println("\tl -> load game");
+            String selection = input.next().toLowerCase();
+            if (selection.equals("n")) {
+                System.out.print("Enter your name: ");
+                String name = input.next();
+                int amount = askInitialBalance();
+                player = new Player(name, amount);
+                break;
+            } else if (selection.equals("l")) {
+                loadPlayer();
+                break;
+            } else {
+                System.out.println("\nInvalid selection.");
+            }
+        }
+    }
+
+    // EFFECTS: ask for input for initial balance that > 0
+    private int askInitialBalance() {
+        while (true) {
+            System.out.print("Enter your initial balance: ");
+            int amount = input.nextInt();
+            if (amount > 0) {
+                return amount;
+            }
+            System.out.println("Invalid balance.");
+        }
     }
 
     // EFFECTS: loop rounds of blackjack until player types "exit" or become broke
-    public void run() {
-        while (true) {
+    private void run() {
+        boolean running = true;
+        while (running) {
             int bet = askBet();
             deal();
             bet = playerTurn(bet);
             dealerTurn();
             payout(bet);
             reset();
-            System.out.println("\nPlayer's balance: " + player.getBalance());
-            if (player.getBalance() <= 0) {
-                System.out.println("You are broke. Game Over!");
-                break;
-            }
-            System.out.println("Press ENTER to continue or type \"exit\". ");
-            if (input.nextLine().equals("exit")) {
-                System.out.println("\nThank you for playing!");
-                break;
-            }
+            running = endMenu();
+        }
+    }
+
+    // EFFECTS: run end sequence
+    private boolean endMenu() {
+        System.out.println("\n" + player.getName() + "'s balance: " + player.getBalance());
+        if (player.getBalance() <= 0) {
+            System.out.println("You are broke. Game Over!");
+            return false;
+        }
+        System.out.println("\nSelect from:");
+        System.out.println("\tc -> continue");
+        System.out.println("\ts -> save and quit");
+        System.out.println("\tq -> quit");
+        String selection = input.next().toLowerCase();
+        if (selection.equals("s")) {
+            savePlayer();
+            return false;
+        } else if (selection.equals("q")) {
+            return false;
+        } else {
+            return true;
         }
     }
 
     // EFFECTS: ask for input for bet that is less than or equal to player's balance
     private int askBet() {
         while (true) {
-            System.out.println("\nPlayer's balance: " + player.getBalance());
+            System.out.println("\n" + player.getName() + "'s balance: " + player.getBalance());
             System.out.print("Enter bet: ");
             int bet = input.nextInt();
             if (bet <= player.getBalance()) {
                 return bet;
             }
-            System.out.println("\nTry again.");
+            System.out.println("\nInvalid bet.");
         }
     }
 
@@ -63,7 +122,7 @@ public class Game {
         player.draw(deck.deal());
         dealer.draw(deck.deal());
         player.draw(deck.deal());
-        System.out.println("\nPlayer's Hand: " + player.getHandString());
+        System.out.println("\n" + player.getName() + "'s Hand: " + player.getHandString());
         System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
     }
 
@@ -127,13 +186,13 @@ public class Game {
                 String decision = askDecision(bet);
                 if (decision.equals("h")) {
                     player.draw(deck.deal());
-                    System.out.println("\nPlayer's Hand: " + player.getHandString());
+                    System.out.println("\n" + player.getName() + "'s Hand: " + player.getHandString());
                     if (checkBustedOr5CardCharlie()) {
                         return bet;
                     }
                 } else if (decision.equals("d")) {
                     player.draw(deck.deal());
-                    System.out.println("\nPlayer's Hand: " + player.getHandString());
+                    System.out.println("\n" + player.getName() + "'s Hand: " + player.getHandString());
                     checkBustedOr5CardCharlie();
                     return bet * 2;
                 } else {
@@ -202,5 +261,28 @@ public class Game {
         System.out.println("\th -> hit");
         System.out.println("\ts -> stand");
         System.out.println("\td -> double down");
+    }
+
+    // EFFECTS: saves the workroom to file
+    private void savePlayer() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(player);
+            jsonWriter.close();
+            System.out.println("Saved " + player.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    private void loadPlayer() {
+        try {
+            player = jsonReader.read();
+            System.out.println("Loaded " + player.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 }

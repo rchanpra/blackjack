@@ -12,8 +12,14 @@ public class PlayerTest {
 
     @BeforeEach
     public void runBefore() {
-        player1 = new Player(100);
-        player2 = new Player(1);
+        player1 = new Player("a",100);
+        player2 = new Player("b",1);
+    }
+
+    @Test
+    public void testGetName() {
+        assertEquals("a",player1.getName());
+        assertEquals("b",player2.getName());
     }
 
     @Test
