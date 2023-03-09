@@ -9,10 +9,10 @@ public class Dealer extends Hand {
     }
 
     // REQUIRES: hand.size() == 2
-    // EFFECTS: return first card in hand and an unknown card indicator
+    // EFFECTS: return dealer's initial hand as appropriate string
     public String getInitialHandString() {
-        String result = "XX " + hand.get(0).getCard() + " (" + hand.get(0).getValue();
-        if (hand.get(0).getValue() == 1) {
+        String result = "XX " + cards.get(0).getCard() + " (" + cards.get(0).getValue();
+        if (cards.get(0).getValue() == 1) {
             result += "/11";
         }
         return result + ")";

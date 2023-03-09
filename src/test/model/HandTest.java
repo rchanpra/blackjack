@@ -30,12 +30,12 @@ public class HandTest {
 
     @Test
     public void testGetHand() {
-        assertEquals(0, hand.getHand().size());
+        assertEquals(0, hand.getCards().size());
         hand.draw(card1);
         hand.draw(card2);
-        assertEquals(2, hand.getHand().size());
-        assertEquals(card1, hand.getHand().get(0));
-        assertEquals(card2, hand.getHand().get(1));
+        assertEquals(2, hand.getCards().size());
+        assertEquals(card1, hand.getCards().get(0));
+        assertEquals(card2, hand.getCards().get(1));
     }
 
     @Test
@@ -61,16 +61,16 @@ public class HandTest {
         hand.draw(card1);
         hand.draw(card2);
         hand.draw(card3);
-        assertEquals(card1, hand.getHand().get(0));
-        assertEquals(card2, hand.getHand().get(1));
-        assertEquals(card3, hand.getHand().get(2));
+        assertEquals(card1, hand.getCards().get(0));
+        assertEquals(card2, hand.getCards().get(1));
+        assertEquals(card3, hand.getCards().get(2));
     }
 
     @Test
     public void testReset() {
         hand.draw(card1);
         hand.reset();
-        assertEquals(0, hand.getHand().size());
+        assertEquals(0, hand.getCards().size());
         assertEquals(0, hand.getValue());
     }
 

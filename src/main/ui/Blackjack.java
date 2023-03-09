@@ -8,6 +8,7 @@ import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 // Represents a game of blackjack
@@ -66,40 +67,52 @@ public class Blackjack {
         }
     }
 
-    // EFFECTS: loop rounds of blackjack until player types "exit" or become broke
+    // EFFECTS: loop rounds of blackjack
     private void run() {
-        boolean running = true;
+        boolean running = select();
         while (running) {
+            reset();
             int bet = askBet();
             deal();
             bet = playerTurn(bet);
             dealerTurn();
             payout(bet);
-            reset();
-            running = endMenu();
+            running = select();
         }
     }
 
-    // EFFECTS: run end sequence
-    private boolean endMenu() {
-        System.out.println("\n" + player.getName() + "'s balance: " + player.getBalance());
-        if (player.getBalance() <= 0) {
-            System.out.println("You are broke. Game Over!");
-            return false;
+    // EFFECTS: run selection sequence
+    private boolean select() {
+        while (true) {
+            System.out.println("\n" + player.getName() + "'s balance: " + player.getBalance());
+            if (player.getBalance() <= 0) {
+                System.out.println("You are broke. Game Over!");
+                return false;
+            }
+            printSelection();
+            String selection = input.next().toLowerCase();
+            if (selection.equals("s")) {
+                savePlayer();
+            } else if (selection.equals("h")) {
+                System.out.println("Previous Hand: " + player.getHand().getHandString());
+                System.out.print("\nPress ENTER to continue.");
+                input.nextLine();
+                input.nextLine();
+            } else if (selection.equals("b")) {
+                return true;
+            } else {
+                return false;
+            }
         }
+    }
+
+    // EFFECTS: print list of selections
+    private void printSelection() {
         System.out.println("\nSelect from:");
-        System.out.println("\tc -> continue");
-        System.out.println("\ts -> save and quit");
+        System.out.println("\tp -> play");
+        System.out.println("\th -> previous hand");
+        System.out.println("\ts -> save");
         System.out.println("\tq -> quit");
-        String selection = input.next().toLowerCase();
-        if (selection.equals("s")) {
-            savePlayer();
-            return false;
-        } else if (selection.equals("q")) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     // EFFECTS: ask for input for bet that is less than or equal to player's balance
@@ -119,45 +132,40 @@ public class Blackjack {
     // EFFECTS: deal 2 cards each and print hands
     private void deal() {
         dealer.draw(deck.deal());
-        player.draw(deck.deal());
+        player.getHand().draw(deck.deal());
         dealer.draw(deck.deal());
-        player.draw(deck.deal());
-        System.out.println("\n" + player.getName() + "'s Hand: " + player.getHandString());
+        player.getHand().draw(deck.deal());
+        System.out.println("\n" + player.getName() + "'s Hand: " + player.getHand().getHandString());
         System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
     }
 
     // MODIFIES: this
     // EFFECTS: determine result and proceed with payouts
     private void payout(int bet) {
-        player.subBalance(bet);
-        if (player.hasBlackjack()) {
-            if (dealer.hasBlackjack()) {
-                player.addBalance(bet);
-            } else {
-                player.addBalance(bet * 2);
-            }
-        } else if (player.has5CardCharlie()) {
-            if (dealer.has5CardCharlie()) {
-                player.addBalance(bet);
-            } else {
-                player.addBalance(bet * 2);
-            }
+        if (player.getHand().hasBlackjack() && !dealer.hasBlackjack()) {
+            player.addBalance(bet);
+        } else if (!player.getHand().hasBlackjack() && dealer.hasBlackjack()) {
+            player.subBalance(bet);
+        } else if (player.getHand().has5CardCharlie() && !dealer.has5CardCharlie()) {
+            player.addBalance(bet);
+        } else if (!player.getHand().has5CardCharlie() && dealer.has5CardCharlie()) {
+            player.subBalance(bet);
         } else {
-            int outcome = playerWinsViaValue();
-            if (!player.isBusted() && (dealer.isBusted() || outcome > 0)) {
-                player.addBalance(bet * 2);
-            } else if ((player.isBusted() && dealer.isBusted()) || outcome == 0) {
+            int outcome = compareHandValue();
+            if (!player.getHand().isBusted() && (dealer.isBusted() || outcome > 0)) {
                 player.addBalance(bet);
+            } else if (!dealer.isBusted() && (player.getHand().isBusted()) || outcome < 0) {
+                player.subBalance(bet);
             }
         }
     }
 
     // EFFECTS: return a value greater than 0 if player's hand value is greater than dealer's hand value, 0 if tied,
     //          else a value less than 0
-    private int playerWinsViaValue() {
-        int playerHandValue = player.getValue();
+    private int compareHandValue() {
+        int playerHandValue = player.getHand().getValue();
         int dealerHandValue = dealer.getValue();
-        if (player.hasAdjustableAce()) {
+        if (player.getHand().hasAdjustableAce()) {
             playerHandValue += 10;
         }
         if (dealer.hasAdjustableAce()) {
@@ -171,28 +179,28 @@ public class Blackjack {
     private void reset() {
         deck.reset();
         dealer.reset();
-        player.reset();
+        player.getHand().reset();
     }
 
     // MODIFIES: this
     // EFFECTS: end if player has blackjack else loop drawing cards until they either double down, stand, bust, or has
     // 5-card Charlie
     private int playerTurn(int bet) {
-        if (player.hasBlackjack()) {
+        if (player.getHand().hasBlackjack()) {
             System.out.println("Blackjack!");
             return bet;
         } else {
             while (true) {
                 String decision = askDecision(bet);
                 if (decision.equals("h")) {
-                    player.draw(deck.deal());
-                    System.out.println("\n" + player.getName() + "'s Hand: " + player.getHandString());
+                    player.getHand().draw(deck.deal());
+                    System.out.println("\n" + player.getName() + "'s Hand: " + player.getHand().getHandString());
                     if (checkBustedOr5CardCharlie()) {
                         return bet;
                     }
                 } else if (decision.equals("d")) {
-                    player.draw(deck.deal());
-                    System.out.println("\n" + player.getName() + "'s Hand: " + player.getHandString());
+                    player.getHand().draw(deck.deal());
+                    System.out.println("\n" + player.getName() + "'s Hand: " + player.getHand().getHandString());
                     checkBustedOr5CardCharlie();
                     return bet * 2;
                 } else {
@@ -204,10 +212,10 @@ public class Blackjack {
 
     // EFFECTS: return true if player bust or has 5-card Charlie else false
     private boolean checkBustedOr5CardCharlie() {
-        if (player.isBusted()) {
+        if (player.getHand().isBusted()) {
             System.out.println("Busted!");
             return true;
-        } else if (player.has5CardCharlie()) {
+        } else if (player.getHand().has5CardCharlie()) {
             System.out.println("5-card charlie!");
             return true;
         } else {
@@ -219,7 +227,7 @@ public class Blackjack {
     // EFFECTS: end if dealer has blackjack else loop drawing cards until dealer's hand value is at least 17 or dealer
     // has 5-card Charlie
     private void dealerTurn() {
-        System.out.println("\nPress ENTER to continue.");
+        System.out.print("\nPress ENTER to continue.");
         input.nextLine();
         input.nextLine();
         System.out.println("\nDealer's Hand: " + dealer.getHandString());
@@ -237,7 +245,7 @@ public class Blackjack {
             if (dealer.isBusted()) {
                 System.out.println("Busted!");
             }
-            System.out.println("\nPress ENTER to continue.");
+            System.out.print("\nPress ENTER to continue.");
             input.nextLine();
         }
     }

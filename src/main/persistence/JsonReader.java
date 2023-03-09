@@ -1,6 +1,9 @@
 package persistence;
 
+import model.Card;
+import model.Hand;
 import model.Player;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -38,6 +41,30 @@ public class JsonReader {
     private Player parseWorkRoom(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         int balance = jsonObject.getInt("balance");
-        return new Player(name, balance);
+        Player player = new Player(name, balance);
+        Hand hand = new Hand();
+        addCards(hand, jsonObject);
+        player.setHand(hand);
+        return player;
+    }
+
+    // MODIFIES: hand
+    // EFFECTS: parses cards from JSON object and adds them to playerHand
+    private void addCards(Hand playerHand, JSONObject jsonObject) {
+        JSONObject hand = jsonObject.getJSONObject("hand");
+        JSONArray jsonArray = hand.getJSONArray("cards");
+        for (Object json : jsonArray) {
+            JSONObject card = (JSONObject) json;
+            addCard(playerHand, card);
+        }
+    }
+
+    // MODIFIES: hand
+    // EFFECTS: parses card from JSON object and adds it to hand
+    private void addCard(Hand hand, JSONObject jsonObject) {
+        int rank = jsonObject.getInt("rank");
+        int suit = jsonObject.getInt("suit");
+        Card card = new Card(rank, suit);
+        hand.draw(card);
     }
 }

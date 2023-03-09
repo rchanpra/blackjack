@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // Represents a card in the deck
 public class Card {
     private int rank;
@@ -34,5 +36,13 @@ public class Card {
     // EFFECTS: return card value
     public int getValue() {
         return Math.min(rank, 10);
+    }
+
+    // EFFECTS: returns this as JSON object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("rank", rank);
+        json.put("suit", suit);
+        return json;
     }
 }
