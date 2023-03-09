@@ -4,15 +4,11 @@
     "hand": {"cards": [
         {
             "rank": 1,
-            "suit": 1,
-            "value": 1,
-            "card": "AC"
+            "suit": 1
         },
         {
             "rank": 13,
-            "suit": 4,
-            "value": 10,
-            "card": "KS"
+            "suit": 4
         }
     ]}
 }

@@ -37,8 +37,13 @@ result, I am rather passionate about it. Therefore, this project could also be c
 - As a user, I want to be able to have a balance that I can add to and subtract from.
 - As a user, I want to be able to bet against a dealer, win/lose/tie, and have payouts.
 - As a user, I want to be able to repeat the rounds of blackjack until I am broke or satisfy.
-- As a user, when I want to quit the application, I want to be able to save my player name and balance to file.
-- As a user, when I start the application, I want to be given the option to load my player name and balance from file.
+- As a user, when I finish a blackjack round, I want to be able to save my player name, balance, hand to file.
+- As a user, when I start the application, I want to be able to start a new game or load previous game from file.
+
+## Citation
+
+The basis of the persistence module has been adapted from the CPSC210 team's work. You can find their code here:
+https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
 ## Upcoming Updates
 

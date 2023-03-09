@@ -86,7 +86,7 @@ public class Hand {
     // EFFECTS: returns this as JSON object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("cards", cards);
+        json.put("cards", cardsToJson());
         return json;
     }
 
@@ -94,7 +94,7 @@ public class Hand {
     public JSONArray cardsToJson() {
         JSONArray jsonArray = new JSONArray();
         for (Card card : cards) {
-            jsonArray.put(card);
+            jsonArray.put(card.toJson());
         }
         return jsonArray;
     }

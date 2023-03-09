@@ -98,7 +98,7 @@ public class Blackjack {
                 System.out.print("\nPress ENTER to continue.");
                 input.nextLine();
                 input.nextLine();
-            } else if (selection.equals("b")) {
+            } else if (selection.equals("p")) {
                 return true;
             } else {
                 return false;
