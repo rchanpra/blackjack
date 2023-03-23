@@ -3,12 +3,12 @@
   "name": "X",
   "hand": {"cards": [
     {
-      "rank": 13,
-      "suit": 4
-    },
-    {
       "rank": 1,
       "suit": 1
+    },
+    {
+      "rank": 13,
+      "suit": 4
     }
   ]}
 }
