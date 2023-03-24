@@ -189,5 +189,9 @@ public class HandTest {
         assertTrue(hand.canSplit());
         hand.addCard(card1);
         assertFalse(hand.canSplit());
+        hand.reset();
+        hand.addCard(card1);
+        hand.addCard(card2);
+        assertFalse(hand.canSplit());
     }
 }
