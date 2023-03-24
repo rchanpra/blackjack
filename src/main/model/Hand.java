@@ -8,67 +8,77 @@ import java.util.ArrayList;
 // Represents a hand of a player or a dealer in a game of blackjack
 public class Hand {
     protected ArrayList<Card> cards;
-    protected int value;
+    private int bet;
 
-    // EFFECTS: initialize hand and value
+    // EFFECTS: initializes cards and bet
     public Hand() {
         cards = new ArrayList<>();
-        value = 0;
+        bet = 0;
     }
 
-    // EFFECTS: return hand
+    // EFFECTS: returns cards
     public ArrayList<Card> getCards() {
         return cards;
     }
 
-    // EFFECTS: return value
-    public int getValue() {
+    // EFFECTS: returns bet
+    public int getBet() {
+        return bet;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets bet
+    public void setBet(int bet) {
+        this.bet = bet;
+    }
+
+    // EFFECTS: returns cards value
+    public int getCardsValue() {
+        int value = 0;
+        for (Card card : cards) {
+            value += card.getValue();
+        }
         return value;
     }
 
-    // EFFECTS: return hand as appropriate string
-    public String getHandString() {
+    // EFFECTS: returns cards as appropriate string
+    public String getCardsString() {
         String result = "";
         for (Card card : cards) {
             result += card.getCard() + " ";
         }
-        result += "(" + value;
+        result += "(" + getCardsValue();
         if (hasAdjustableAce()) {
-            result += "/" + (value + 10);
+            result += "/" + (getCardsValue() + 10);
         }
         return result + ")";
     }
 
     // MODIFIES: this
-    // EFFECTS: add card to hand and card value to value
-    public void draw(Card card) {
+    // EFFECTS: adds card to cards
+    public void addCard(Card card) {
         cards.add(card);
-        value += card.getValue();
     }
 
     // MODIFIES: this
-    // EFFECTS: reinitialize hand and value
+    // EFFECTS: removes card at index from cards and returns it
+    public Card removeCard(int index) {
+        return cards.remove(index);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: reinitialize cards and bet
     public void reset() {
         cards = new ArrayList<>();
-        value = 0;
+        bet = 0;
     }
 
-    // EFFECTS: return true if value is greater than 21 else false
+    // EFFECTS: returns true if cards value is greater than 21 else false
     public boolean isBusted() {
-        return value > 21;
+        return getCardsValue() > 21;
     }
 
-    // EFFECTS: return true if hand has 2 cards with an ace and value is 11 else false
-    public boolean hasBlackjack() {
-        return cards.size() == 2 && hasAce() & getValue() == 11;
-    }
-
-    // EFFECTS: return true if hand has 5 cards and not busted else false
-    public boolean has5CardCharlie() {
-        return cards.size() == 5 && !isBusted();
-    }
-
-    // EFFECTS: return true if hand has an ace else false
+    // EFFECTS: returns true if cards have an ace else false
     public boolean hasAce() {
         for (Card card : cards) {
             if (card.getRank() == 1) {
@@ -78,15 +88,31 @@ public class Hand {
         return false;
     }
 
-    // EFFECTS: return true if hand has an ace and hand value is 11 or less else false
+    // EFFECTS: returns true if cards have an ace and cards value is 11 or less else false
     public boolean hasAdjustableAce() {
-        return hasAce() && value <= 11;
+        return hasAce() && getCardsValue() <= 11;
+    }
+
+    // EFFECTS: returns true if cards have 2 cards with an ace and value is 11 else false
+    public boolean hasBlackjack() {
+        return cards.size() == 2 && hasAce() & getCardsValue() == 11;
+    }
+
+    // EFFECTS: returns true if cards have 5 cards and not busted else false
+    public boolean has5CardCharlie() {
+        return cards.size() == 5 && !isBusted();
+    }
+
+    // EFFECTS: returns true if cards have 2 cards with same rank else false
+    public boolean canSplit() {
+        return cards.size() == 2 && cards.get(0).getRank() == cards.get(1).getRank();
     }
 
     // EFFECTS: returns this as JSON object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("cards", cardsToJson());
+        json.put("bet", bet);
         return json;
     }
 

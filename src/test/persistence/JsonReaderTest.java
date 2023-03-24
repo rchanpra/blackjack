@@ -29,8 +29,10 @@ class JsonReaderTest {
         try {
             Player player = reader.read();
             assertEquals("X", player.getName());
-            assertEquals(10, player.getBalance());
-            assertEquals(0, player.getHand().getCards().size());
+            assertEquals(1, player.getBalance());
+            assertEquals(2, player.getInitial());
+            assertEquals(3, player.getGoal());
+            assertEquals(0, player.getHands().size());
         } catch (IOException e) {
             fail("IOException unexpected");
         }
@@ -42,8 +44,11 @@ class JsonReaderTest {
         try {
             Player player = reader.read();
             assertEquals("X", player.getName());
-            assertEquals(10, player.getBalance());
-            List<Card> hand = player.getHand().getCards();
+            assertEquals(1, player.getBalance());
+            assertEquals(2, player.getInitial());
+            assertEquals(3, player.getGoal());
+            assertEquals(1, player.getHands().size());
+            List<Card> hand = player.getHands().get(0).getCards();
             assertEquals(2, hand.size());
             assertEquals(1, hand.get(0).getRank());
             assertEquals(1, hand.get(0).getSuit());

@@ -15,20 +15,20 @@ public class DeckTest {
     }
 
     @Test
-    public void testGetDeck() {
-        assertEquals(52, deck.getDeck().size());
+    public void testGetCards() {
+        assertEquals(52, deck.getCards().size());
     }
 
     @Test
     public void testDeal() {
         deck.deal();
-        assertEquals(51, deck.getDeck().size());
+        assertEquals(51, deck.getCards().size());
     }
 
     @Test
-    public void testReset() {
+    public void testShuffle() {
         deck.deal();
-        deck.reset();
-        assertEquals(52, deck.getDeck().size());
+        deck.shuffle();
+        assertEquals(52, deck.getCards().size());
     }
 }

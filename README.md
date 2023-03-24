@@ -47,7 +47,6 @@ https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
 ## Upcoming Updates
 
-- Add split and surrender as decisions
 - Add multiplayer
 - Add GUI
 - Add Baccarat and/or Pok Deng and potentially turn application into Playing Cards Simulator

@@ -1,5 +1,7 @@
 {
-    "balance": 10,
-    "name": "X",
-    "hand": {"cards": []}
+  "goal": 3,
+  "hands": [],
+  "balance": 1,
+  "initial": 2,
+  "name": "X"
 }

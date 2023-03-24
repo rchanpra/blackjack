@@ -1,14 +1,19 @@
 {
-  "balance": 10,
-  "name": "X",
-  "hand": {"cards": [
-    {
-      "rank": 1,
-      "suit": 1
-    },
-    {
-      "rank": 13,
-      "suit": 4
-    }
-  ]}
+  "goal": 3,
+  "hands": [{
+    "bet": 0,
+    "cards": [
+      {
+        "rank": 1,
+        "suit": 1
+      },
+      {
+        "rank": 13,
+        "suit": 4
+      }
+    ]
+  }],
+  "balance": 1,
+  "initial": 2,
+  "name": "X"
 }

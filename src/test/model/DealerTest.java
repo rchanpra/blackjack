@@ -20,12 +20,12 @@ public class DealerTest {
 
     @Test
     public void testGetInitialHandString() {
-        dealer.draw(card1);
-        dealer.draw(card2);
-        assertEquals("XX AC (1/11)", dealer.getInitialHandString());
+        dealer.addCard(card1);
+        dealer.addCard(card2);
+        assertEquals("XX AC (1/11+)", dealer.getInitialHandString());
         dealer.reset();
-        dealer.draw(card2);
-        dealer.draw(card1);
-        assertEquals("XX 7H (7)", dealer.getInitialHandString());
+        dealer.addCard(card2);
+        dealer.addCard(card1);
+        assertEquals("XX 7H (7+)", dealer.getInitialHandString());
     }
 }

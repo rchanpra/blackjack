@@ -41,22 +41,29 @@ public class JsonReader {
     private Player parseWorkRoom(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         int balance = jsonObject.getInt("balance");
-        Player player = new Player(name, balance);
-        Hand hand = new Hand();
-        addCards(hand, jsonObject);
-        player.setHand(hand);
+        int initial = jsonObject.getInt("initial");
+        int goal = jsonObject.getInt("goal");
+        Player player = new Player(name, balance, initial, goal);
+        JSONArray jsonArray = jsonObject.getJSONArray("hands");
+        for (Object json : jsonArray) {
+            JSONObject hand = (JSONObject) json;
+            addHand(player, hand);
+        }
         return player;
     }
 
-    // MODIFIES: hand
-    // EFFECTS: parses cards from JSON object and adds them to playerHand
-    private void addCards(Hand playerHand, JSONObject jsonObject) {
-        JSONObject hand = jsonObject.getJSONObject("hand");
-        JSONArray jsonArray = hand.getJSONArray("cards");
+    // MODIFIES: player
+    // EFFECTS: parses hand from JSON object and adds it to player
+    private void addHand(Player player, JSONObject jsonObject) {
+        JSONArray jsonArray = jsonObject.getJSONArray("cards");
+        int bet = jsonObject.getInt("bet");
+        Hand hand = new Hand();
         for (Object json : jsonArray) {
             JSONObject card = (JSONObject) json;
-            addCard(playerHand, card);
+            addCard(hand, card);
         }
+        hand.setBet(bet);
+        player.addHand(hand);
     }
 
     // MODIFIES: hand
@@ -65,6 +72,6 @@ public class JsonReader {
         int rank = jsonObject.getInt("rank");
         int suit = jsonObject.getInt("suit");
         Card card = new Card(rank, suit);
-        hand.draw(card);
+        hand.addCard(card);
     }
 }

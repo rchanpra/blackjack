@@ -2,38 +2,40 @@ package model;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 // Represents a card in the deck
 public class Card {
+    public static final List<String> RANKS =
+            List.of("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K");
+    public static final List<String> SUITS = List.of("C", "D", "H", "S");
+
     private int rank;
     private int suit;
-    private Ranks ranks;
-    private Suits suits;
 
     // REQUIRES: 1 <= rank <= 13 and 1 <= suit <= 4
-    // EFFECTS: initialize rank and suit as respective parameters and initialize ranks and suits
+    // EFFECTS: initializes rank and suit with parameters
     public Card(int rank, int suit) {
         this.rank = rank;
         this.suit = suit;
-        ranks = new Ranks();
-        suits = new Suits();
     }
 
-    // EFFECTS: return rank
+    // EFFECTS: returns rank
     public int getRank() {
         return rank;
     }
 
-    // EFFECTS: return suit
+    // EFFECTS: returns suit
     public int getSuit() {
         return suit;
     }
 
-    // EFFECTS: return rank and suit as string
+    // EFFECTS: returns rank and suit as string
     public String getCard() {
-        return ranks.getRanks().get(rank) + suits.getSuits().get(suit);
+        return RANKS.get(rank - 1) + SUITS.get(suit - 1);
     }
 
-    // EFFECTS: return card value
+    // EFFECTS: returns card value
     public int getValue() {
         return Math.min(rank, 10);
     }

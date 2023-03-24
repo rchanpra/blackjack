@@ -1,20 +1,21 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Represents a deck of cards
 public class Deck {
-    private ArrayList<Card> deck;
+    private List<Card> cards;
 
     // EFFECTS: initialize deck and add 52 unique cards to it
     public Deck() {
-        deck = new ArrayList<>();
+        cards = new ArrayList<>();
         addCards();
     }
 
     // EFFECTS: return deck
-    public ArrayList<Card> getDeck() {
-        return deck;
+    public List<Card> getCards() {
+        return cards;
     }
 
     // MODIFIES: this
@@ -25,7 +26,7 @@ public class Deck {
             int suit = 1;
             while (suit <= 4) {
                 Card card = new Card(rank, suit);
-                deck.add(card);
+                cards.add(card);
                 suit++;
             }
             rank++;
@@ -35,13 +36,13 @@ public class Deck {
     // MODIFIES: this
     // EFFECTS: randomly remove a card from deck and return it
     public Card deal() {
-        return deck.remove((int) (Math.random() * (deck.size() - 1)));
+        return cards.remove((int) (Math.random() * (cards.size() - 1)));
     }
 
     // MODIFIES: this
-    // EFFECTS: reinitialize deck and add 52 unique cards to it
-    public void reset() {
-        deck = new ArrayList<>();
+    // EFFECTS: reinitialize deck and adds 52 unique cards to it
+    public void shuffle() {
+        cards = new ArrayList<>();
         addCards();
     }
 }
