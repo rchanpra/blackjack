@@ -36,15 +36,7 @@ public class Blackjack {
             shuffle();
             player.getHands().get(0).setBet(askBet());
             deal();
-            if (player.getHands().get(0).hasBlackjack()) {
-                System.out.println("\n" + player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
-                System.out.println("Blackjack!");
-            }
-            if (dealer.hasBlackjack()) {
-                System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
-                System.out.println("Blackjack!");
-            }
-            if (player.getHands().get(0).hasBlackjack()) {
+            if (hasBlackjack()) {
                 payout();
             } else if (playerFirstTurn()) {
                 dealerTurn();
@@ -52,6 +44,26 @@ public class Blackjack {
             }
             running = menu();
         }
+    }
+
+    // EFFECTS: returns true if there is a blackjack in the round else false
+    private boolean hasBlackjack() {
+        if (player.getHands().get(0).hasBlackjack()) {
+            System.out.println("\n" + player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
+            System.out.println("Blackjack!");
+            System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
+            if (dealer.hasBlackjack()) {
+                System.out.println("Blackjack!");
+            }
+            return true;
+        }
+        if (dealer.hasBlackjack()) {
+            System.out.println("\n" + player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
+            System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
+            System.out.println("Blackjack!");
+            return true;
+        }
+        return false;
     }
 
     // EFFECTS: prints introduction
@@ -132,6 +144,7 @@ public class Blackjack {
     }
 
     // EFFECTS: runs menu
+    @SuppressWarnings("methodlength")
     private boolean menu() {
         while (true) {
             System.out.println("\n" + player.getBalanceString());
@@ -144,12 +157,16 @@ public class Blackjack {
             switch (selection) {
                 case "p": return true;
                 case "h": System.out.println("Previous Hand: " + player.getHandsString());
+                    enterToContinue();
                     break;
                 case "i": System.out.println("Initial Balance: " + player.getInitial());
+                    enterToContinue();
                     break;
                 case "g": System.out.println("Goal Balance: " + player.getGoal());
+                    enterToContinue();
                     break;
                 case "s": savePlayer();
+                    enterToContinue();
                     break;
                 case "q": return false;
                 default: System.out.println("Invalid input.");
@@ -222,9 +239,7 @@ public class Blackjack {
     // EFFECTS: ends if dealer has blackjack else loop drawing cards until dealer's hand value is at least 17 or dealer
     // has 5-card Charlie
     private void dealerTurn() {
-        System.out.print("Press <ENTER> to continue.");
-        input.nextLine();
-        input.nextLine();
+        enterToContinue();
         System.out.println("\nDealer's Hand: " + dealer.getCardsString());
         while (dealer.getCardsValue() < 17) {
             dealer.addCard(deck.deal());
@@ -237,8 +252,7 @@ public class Blackjack {
         if (dealer.isBusted()) {
             System.out.println("Busted!");
         }
-        System.out.print("Press <ENTER> to continue.");
-        input.nextLine();
+        enterToContinue();
     }
 
     // MODIFIES: this
@@ -310,9 +324,8 @@ public class Blackjack {
             case "su":
                 player.getHands().get(0).setBet((int) Math.round((double) player.getHands().get(0).getBet() / 2));
                 player.subBalance(player.getHands().get(0).getBet());
-                return false;
+            default: return false;
         }
-        return false;
     }
 
     // EFFECTS: asks for input for first decision that adheres to format and returns it
@@ -356,6 +369,7 @@ public class Blackjack {
     private void runDoubleDown() {
         player.getHands().get(0).setBet(player.getHands().get(0).getBet() * 2);
         player.getHands().get(0).addCard(deck.deal());
+        System.out.println(player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
         checkBustedOr5CardCharlie(player.getHands().get(0));
     }
 
@@ -377,20 +391,20 @@ public class Blackjack {
     // EFFECTS: runs rest turns of player
     private void playerRestTurn() {
         for (Hand hand : player.getHands()) {
-            while (true) {
+            boolean running = true;
+            while (running) {
                 String decision = askRestDecision(hand);
-                if (decision.equals("h")) {
-                    hand.addCard(deck.deal());
-                    if (checkBustedOr5CardCharlie(hand)) {
+                switch (decision) {
+                    case "h": hand.addCard(deck.deal());
+                        if (checkBustedOr5CardCharlie(hand)) {
+                            running = false;
+                        }
                         break;
-                    }
-                } else if (decision.equals("d")) {
-                    hand.setBet(hand.getBet() * 2);
-                    hand.addCard(deck.deal());
-                    checkBustedOr5CardCharlie(hand);
-                    break;
-                } else {
-                    break;
+                    case "d": hand.setBet(hand.getBet() * 2);
+                        hand.addCard(deck.deal());
+                        checkBustedOr5CardCharlie(hand);
+                    case "s": running = false;
+                        break;
                 }
             }
         }
@@ -421,6 +435,19 @@ public class Blackjack {
         System.out.println("\th -> hit");
         System.out.println("\ts -> stand");
         System.out.println("\td -> double down");
+    }
+
+    // EFFECTS: runs "Press <ENTER> to continue." sequence
+    private void enterToContinue() {
+        System.out.print("Press <ENTER> to continue.");
+        input.nextLine();
+        input.nextLine();
+    }
+
+    // EFFECTS: runs "Press <ENTER> to continue." sequence but 2 input.nextLine();
+    private void enterToContinue2() {
+        enterToContinue();
+        input.nextLine();
     }
 
     // EFFECTS: saves player to file
