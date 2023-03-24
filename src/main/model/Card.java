@@ -2,13 +2,14 @@ package model;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 // Represents a card in the deck
 public class Card {
     public static final List<String> RANKS =
-            List.of("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K");
-    public static final List<String> SUITS = List.of("C", "D", "H", "S");
+            Arrays.asList("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K");
+    public static final List<String> SUITS = Arrays.asList("C", "D", "H", "S");
 
     private int rank;
     private int suit;
