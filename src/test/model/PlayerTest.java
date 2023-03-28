@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Unit tests for the Player class
 public class PlayerTest {
     private Player player1;
     private Player player2;
@@ -34,9 +33,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetInitial() {
-        assertEquals(10, player1.getInitial());
-        assertEquals(2, player2.getInitial());
+    public void testGetStarting() {
+        assertEquals(10, player1.getStarting());
+        assertEquals(2, player2.getStarting());
     }
 
     @Test
@@ -46,9 +45,15 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetHands() {
-        assertEquals(0, player1.getHands().size());
-        assertEquals(0, player2.getHands().size());
+    public void testGetAltHands() {
+        assertNull(player1.getAltHand());
+        assertNull(player2.getAltHand());
+    }
+
+    @Test
+    public void testGetHandHistory() {
+        assertEquals(0, player1.getHandHistory().size());
+        assertEquals(0, player2.getHandHistory().size());
     }
 
     @Test
@@ -58,29 +63,58 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetHandsString() {
-        player1.addHand(hand);
-        assertEquals("AC 7H KS (18), ", player1.getHandsString());
-        assertEquals("", player2.getHandsString());
+    public void testGetHandHistoryString() {
+        player1.addHandHistory(hand);
+        assertEquals("AC 7H KS (18) [0], ", player1.getHandHistoryString());
+        assertEquals("", player2.getHandHistoryString());
     }
 
     @Test
-    public void testAddHand() {
-        player1.addHand(hand);
-        assertEquals(3, player1.getHands().get(0).getCards().size());
-        assertEquals(1, player1.getHands().get(0).getCards().get(0).getRank());
-        assertEquals(7, player1.getHands().get(0).getCards().get(1).getRank());
-        assertEquals(13, player1.getHands().get(0).getCards().get(2).getRank());
-        assertEquals(1, player1.getHands().get(0).getCards().get(0).getSuit());
-        assertEquals(3, player1.getHands().get(0).getCards().get(1).getSuit());
-        assertEquals(4, player1.getHands().get(0).getCards().get(2).getSuit());
+    public void testSetAltHands() {
+        player1.setAltHand(hand);
+        assertEquals(hand, player1.getAltHand());
+        player2.setAltHand(hand);
+        assertEquals(hand, player2.getAltHand());
     }
 
     @Test
-    public void testResetHands() {
-        player1.resetHands();
-        assertEquals(1, player1.getHands().size());
-        assertEquals(0, player1.getHands().get(0).getCards().size());
+    public void testAddHandHistory() {
+        player1.addHandHistory(hand);
+        assertEquals(3, player1.getHandHistory().get(0).getCards().size());
+        assertEquals(1, player1.getHandHistory().get(0).getCards().get(0).getRank());
+        assertEquals(7, player1.getHandHistory().get(0).getCards().get(1).getRank());
+        assertEquals(13, player1.getHandHistory().get(0).getCards().get(2).getRank());
+        assertEquals(1, player1.getHandHistory().get(0).getCards().get(0).getSuit());
+        assertEquals(3, player1.getHandHistory().get(0).getCards().get(1).getSuit());
+        assertEquals(4, player1.getHandHistory().get(0).getCards().get(2).getSuit());
+    }
+
+    @Test
+    public void testShuffleNullAltHand() {
+        player1.setHand(hand);
+        assertEquals(3, player1.getHand().getCards().size());
+        assertNull(player1.getAltHand());
+        assertEquals(0, player1.getHandHistory().size());
+        player1.shuffle();
+        assertEquals(0, player1.getHand().getCards().size());
+        assertNull(player1.getAltHand());
+        assertEquals(1, player1.getHandHistory().size());
+        assertEquals(hand, player1.getHandHistory().get(0));
+    }
+
+    @Test
+    public void testShuffleDefinedAltHand() {
+        player1.setHand(hand);
+        player1.setAltHand(hand);
+        assertEquals(3, player1.getHand().getCards().size());
+        assertEquals(hand, player1.getAltHand());
+        assertEquals(0, player1.getHandHistory().size());
+        player1.shuffle();
+        assertEquals(0, player1.getHand().getCards().size());
+        assertNull(player1.getAltHand());
+        assertEquals(2, player1.getHandHistory().size());
+        assertEquals(hand, player1.getHandHistory().get(0));
+        assertEquals(hand, player1.getHandHistory().get(1));
     }
 
     @Test

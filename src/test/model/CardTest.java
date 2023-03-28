@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Unit tests for the Card class
 public class CardTest {
     private Card card1;
     private Card card2;

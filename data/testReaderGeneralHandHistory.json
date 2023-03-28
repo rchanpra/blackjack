@@ -1,6 +1,8 @@
 {
     "goal": 3,
-    "hands": [{
+    "balance": 1,
+    "starting": 2,
+    "handHistory": [{
         "bet": 0,
         "cards": [
             {
@@ -13,7 +15,5 @@
             }
         ]
     }],
-    "balance": 1,
-    "initial": 2,
     "name": "X"
 }

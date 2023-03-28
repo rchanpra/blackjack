@@ -16,7 +16,7 @@ class JsonWriterTest {
     @Test
     void testWriterInvalidFile() {
         try {
-            Player player = new Player("X", 1, 1,2);
+            Player player = new Player("X", 1, 2, 3);
             JsonWriter writer = new JsonWriter("./data/<invalidFile>.json");
             writer.open();
             fail("IOException expected");
@@ -26,45 +26,45 @@ class JsonWriterTest {
     }
 
     @Test
-    void testWriterEmptyHand() {
+    void testWriterEmptyHandHistory() {
         try {
-            Player player = new Player("X", 1, 2,3);
-            JsonWriter writer = new JsonWriter("./data/testWriterEmptyHand.json");
+            Player player = new Player("X", 1, 2, 3);
+            JsonWriter writer = new JsonWriter("./data/testWriterEmptyHandHistory.json");
             writer.open();
             writer.write(player);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriterEmptyHand.json");
+            JsonReader reader = new JsonReader("./data/testWriterEmptyHandHistory.json");
             player = reader.read();
             assertEquals("X", player.getName());
             assertEquals(1, player.getBalance());
-            assertEquals(2, player.getInitial());
+            assertEquals(2, player.getStarting());
             assertEquals(3, player.getGoal());
-            assertEquals(0, player.getHands().size());
+            assertEquals(0, player.getHandHistory().size());
         } catch (IOException e) {
             fail("IOException unexpected");
         }
     }
 
     @Test
-    void testWriterGeneralHand() {
+    void testWriterGeneralHandHistory() {
         try {
-            Player player = new Player("X", 1, 2,3);
+            Player player = new Player("X", 1, 2, 3);
             Hand hand0 = new Hand();
             hand0.addCard(new Card(1, 1));
             hand0.addCard(new Card(13, 4));
-            player.addHand(hand0);
-            JsonWriter writer = new JsonWriter("./data/testWriterGeneralHand.json");
+            player.addHandHistory(hand0);
+            JsonWriter writer = new JsonWriter("./data/testWriterGeneralHandHistory.json");
             writer.open();
             writer.write(player);
             writer.close();
-            JsonReader reader = new JsonReader("./data/testWriterGeneralHand.json");
+            JsonReader reader = new JsonReader("./data/testWriterGeneralHandHistory.json");
             player = reader.read();
             assertEquals("X", player.getName());
             assertEquals(1, player.getBalance());
-            assertEquals(2, player.getInitial());
+            assertEquals(2, player.getStarting());
             assertEquals(3, player.getGoal());
-            assertEquals(1, player.getHands().size());
-            List<Card> hand = player.getHands().get(0).getCards();
+            assertEquals(1, player.getHandHistory().size());
+            List<Card> hand = player.getHandHistory().get(0).getCards();
             assertEquals(2, hand.size());
             assertEquals(1, hand.get(0).getRank());
             assertEquals(1, hand.get(0).getSuit());

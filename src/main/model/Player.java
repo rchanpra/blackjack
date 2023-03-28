@@ -7,21 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Represents a player in a game of blackjack
-public class Player {
+public class Player extends Person {
     private String name;
     private int balance;
-    private int initial;
+    private int starting;
     private int goal;
-    private List<Hand> hands;
+    private Hand altHand;
+    private List<Hand> handHistory;
 
-    // REQUIRES: initial > 0 and goal > initial
-    // EFFECTS: initializes name, balance, initial, and goal with parameters, initializes hands empty
-    public Player(String name, int balance, int initial, int goal) {
+    // REQUIRES: starting > 0 and goal > initial
+    // EFFECTS: initializes name, balance, starting, and goal with parameters, initializes hands empty
+    public Player(String name, int balance, int starting, int goal) {
+        super();
         this.name = name;
         this.balance = balance;
-        this.initial = initial;
+        this.starting = starting;
         this.goal = goal;
-        hands = new ArrayList<>();
+        handHistory = new ArrayList<>();
     }
 
     // EFFECTS: returns name
@@ -34,9 +36,9 @@ public class Player {
         return balance;
     }
 
-    // EFFECTS: returns initial
-    public int getInitial() {
-        return initial;
+    // EFFECTS: returns starting
+    public int getStarting() {
+        return starting;
     }
 
     // EFFECTS: returns goal
@@ -44,9 +46,14 @@ public class Player {
         return goal;
     }
 
-    // EFFECTS: returns hands
-    public List<Hand> getHands() {
-        return hands;
+    // EFFECTS: returns altHand
+    public Hand getAltHand() {
+        return altHand;
+    }
+
+    // EFFECTS: returns handHistory
+    public List<Hand> getHandHistory() {
+        return handHistory;
     }
 
     // EFFECTS: returns name and balance as appropriate string
@@ -54,26 +61,38 @@ public class Player {
         return name + "'s balance: " + balance;
     }
 
-    // EFFECTS: returns hands as appropriate string
-    public String getHandsString() {
+    // EFFECTS: returns handHistory as appropriate string
+    public String getHandHistoryString() {
         String handsString = "";
-        for (Hand hand : hands) {
-            handsString += hand.getCardsString() + ", ";
+        for (Hand hand : handHistory) {
+            handsString += hand.getCardsString() + " [" + hand.getBet() + "], ";
         }
         return handsString;
     }
 
     // MODIFIES: this
-    // EFFECTS: adds hand to hands
-    public void addHand(Hand hand) {
-        hands.add(hand);
+    // EFFECTS: sets altHand as hand
+    public void setAltHand(Hand hand) {
+        altHand = hand;
     }
 
     // MODIFIES: this
-    // EFFECTS: reinitialize hands and adds a new hand to it
-    public void resetHands() {
-        hands = new ArrayList<>();
-        hands.add(new Hand());
+    // EFFECTS: adds hand to handHistory
+    public void addHandHistory(Hand hand) {
+        handHistory.add(hand);
+    }
+
+
+    // MODIFIES: this
+    // EFFECTS: adds hand(s) to handHistory and reinitialize hand(s)
+    @Override
+    public void shuffle() {
+        handHistory.add(hand);
+        if (altHand != null) {
+            handHistory.add(altHand);
+        }
+        hand = new Hand();
+        altHand = null;
     }
 
     // MODIFIES: this
@@ -94,16 +113,16 @@ public class Player {
         JSONObject json = new JSONObject();
         json.put("name", name);
         json.put("balance", balance);
-        json.put("initial", initial);
+        json.put("starting", starting);
         json.put("goal", goal);
-        json.put("hands", handsToJson());
+        json.put("handHistory", handHistoryToJson());
         return json;
     }
 
-    // EFFECTS: returns hands in this player as a JSON array
-    public JSONArray handsToJson() {
+    // EFFECTS: returns handHistory in this player as a JSON array
+    public JSONArray handHistoryToJson() {
         JSONArray jsonArray = new JSONArray();
-        for (Hand hand : hands) {
+        for (Hand hand : handHistory) {
             jsonArray.put(hand.toJson());
         }
         return jsonArray;

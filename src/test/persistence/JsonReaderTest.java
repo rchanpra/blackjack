@@ -24,31 +24,31 @@ class JsonReaderTest {
     }
 
     @Test
-    void testReaderEmptyHand() {
-        JsonReader reader = new JsonReader("./data/testReaderEmptyHand.json");
+    void testReaderEmptyHandHistory() {
+        JsonReader reader = new JsonReader("./data/testReaderEmptyHandHistory.json");
         try {
             Player player = reader.read();
             assertEquals("X", player.getName());
             assertEquals(1, player.getBalance());
-            assertEquals(2, player.getInitial());
+            assertEquals(2, player.getStarting());
             assertEquals(3, player.getGoal());
-            assertEquals(0, player.getHands().size());
+            assertEquals(0, player.getHandHistory().size());
         } catch (IOException e) {
             fail("IOException unexpected");
         }
     }
 
     @Test
-    void testReaderGeneralHand() {
-        JsonReader reader = new JsonReader("./data/testReaderGeneralHand.json");
+    void testReaderGeneralHandHistory() {
+        JsonReader reader = new JsonReader("./data/testReaderGeneralHandHistory.json");
         try {
             Player player = reader.read();
             assertEquals("X", player.getName());
             assertEquals(1, player.getBalance());
-            assertEquals(2, player.getInitial());
+            assertEquals(2, player.getStarting());
             assertEquals(3, player.getGoal());
-            assertEquals(1, player.getHands().size());
-            List<Card> hand = player.getHands().get(0).getCards();
+            assertEquals(1, player.getHandHistory().size());
+            List<Card> hand = player.getHandHistory().get(0).getCards();
             assertEquals(2, hand.size());
             assertEquals(1, hand.get(0).getRank());
             assertEquals(1, hand.get(0).getSuit());

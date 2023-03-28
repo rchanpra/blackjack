@@ -1,7 +1,7 @@
 {
     "goal": 3,
-    "hands": [],
     "balance": 1,
-    "initial": 2,
+    "starting": 2,
+    "handHistory": [],
     "name": "X"
 }

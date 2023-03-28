@@ -1,10 +1,11 @@
 package ui;
 
-// Represents a main class to initiate blackjack
+// Represents a main class to initialize blackjack
 public class Main {
 
-    // EFFECTS: initiate blackjack
+    // EFFECTS: initialize blackjack
     public static void main(String[] args) {
-        new Blackjack();
+        // new Blackjack();
+        new BlackjackGUI();
     }
 }

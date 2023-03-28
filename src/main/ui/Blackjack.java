@@ -33,34 +33,31 @@ public class Blackjack {
         start();
         boolean running = menu();
         while (running) {
-            shuffle();
-            player.getHands().get(0).setBet(askBet());
+            player.getHand().setBet(askBet());
             deal();
             if (hasBlackjack()) {
-                payout();
+                payout(player.getHand());
             } else if (playerFirstTurn()) {
                 dealerTurn();
-                payout();
+                payout(player.getHand());
+                if (player.getAltHand() != null) {
+                    payout(player.getAltHand());
+                }
             }
+            shuffle();
             running = menu();
         }
     }
 
     // EFFECTS: returns true if there is a blackjack in the round else false
     private boolean hasBlackjack() {
-        if (player.getHands().get(0).hasBlackjack()) {
-            System.out.println("\n" + player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
+        if (player.getHand().hasBlackjack()) {
+            System.out.println("\n" + player.getName() + "'s Hand: " + player.getHand().getCardsString());
             System.out.println("Blackjack!");
             System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
-            if (dealer.hasBlackjack()) {
+            if (dealer.getHand().hasBlackjack()) {
                 System.out.println("Blackjack!");
             }
-            return true;
-        }
-        if (dealer.hasBlackjack()) {
-            System.out.println("\n" + player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
-            System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
-            System.out.println("Blackjack!");
             return true;
         }
         return false;
@@ -156,10 +153,10 @@ public class Blackjack {
             String selection = input.next().toLowerCase();
             switch (selection) {
                 case "p": return true;
-                case "h": System.out.println("Previous Hand: " + player.getHandsString());
+                case "h": System.out.println("Previous Hand: " + player.getHandHistoryString());
                     enterToContinue();
                     break;
-                case "i": System.out.println("Initial Balance: " + player.getInitial());
+                case "i": System.out.println("Initial Balance: " + player.getStarting());
                     enterToContinue();
                     break;
                 case "g": System.out.println("Goal Balance: " + player.getGoal());
@@ -222,17 +219,17 @@ public class Blackjack {
     // EFFECTS: resets deck and hands
     private void shuffle() {
         deck.shuffle();
-        dealer.reset();
-        player.resetHands();
+        dealer.shuffle();
+        player.shuffle();
     }
 
     // MODIFIES: this
     // EFFECTS: deals 2 cards to each hand
     private void deal() {
-        dealer.addCard(deck.deal());
-        player.getHands().get(0).addCard(deck.deal());
-        dealer.addCard(deck.deal());
-        player.getHands().get(0).addCard(deck.deal());
+        dealer.getHand().addCard(deck.deal());
+        player.getHand().addCard(deck.deal());
+        dealer.getHand().addCard(deck.deal());
+        player.getHand().addCard(deck.deal());
     }
 
     // MODIFIES: this
@@ -240,55 +237,45 @@ public class Blackjack {
     // has 5-card Charlie
     private void dealerTurn() {
         enterToContinue();
-        System.out.println("\nDealer's Hand: " + dealer.getCardsString());
-        while (dealer.getCardsValue() < 17) {
-            dealer.addCard(deck.deal());
-            System.out.println("Dealer's Hand: " + dealer.getCardsString());
-            if (dealer.has5CardCharlie() && !dealer.isBusted()) {
-                System.out.println("5-card charlie!");
-                break;
+        System.out.println("\nDealer's Hand: " + dealer.getHand().getCardsString());
+        if (dealer.getHand().hasBlackjack()) {
+            System.out.println("Blackjack!");
+        } else {
+            while (dealer.canDraw()) {
+                dealer.getHand().addCard(deck.deal());
+                System.out.println("Dealer's Hand: " + dealer.getHand().getCardsString());
+                if (dealer.getHand().has5CardCharlie() && !dealer.getHand().isBusted()) {
+                    System.out.println("5-card charlie!");
+                    break;
+                }
             }
-        }
-        if (dealer.isBusted()) {
-            System.out.println("Busted!");
+            if (dealer.getHand().isBusted()) {
+                System.out.println("Busted!");
+            }
         }
         enterToContinue();
     }
 
     // MODIFIES: this
     // EFFECTS: determines round outcome and proceeds with payouts for each hand
-    private void payout() {
-        for (Hand hand : player.getHands()) {
-            if (hand.hasBlackjack() && !dealer.hasBlackjack()) {
+    private void payout(Hand hand) {
+        if (hand.hasBlackjack() && !dealer.getHand().hasBlackjack()) {
+            player.addBalance(hand.getBet());
+        } else if (!hand.hasBlackjack() && dealer.getHand().hasBlackjack()) {
+            player.subBalance(hand.getBet());
+        } else if (hand.has5CardCharlie() && !dealer.getHand().has5CardCharlie()) {
+            player.addBalance(hand.getBet());
+        } else if (!hand.has5CardCharlie() && dealer.getHand().has5CardCharlie()) {
+            player.subBalance(hand.getBet());
+        } else {
+            if (!hand.isBusted() && (dealer.getHand().isBusted() || hand.getCardsValue() > dealer.getHand()
+                    .getCardsValue())) {
                 player.addBalance(hand.getBet());
-            } else if (!hand.hasBlackjack() && dealer.hasBlackjack()) {
+            } else if (!dealer.getHand().isBusted() && (hand.isBusted()) || hand.getCardsValue() > dealer.getHand()
+                    .getCardsValue()) {
                 player.subBalance(hand.getBet());
-            } else if (hand.has5CardCharlie() && !dealer.has5CardCharlie()) {
-                player.addBalance(hand.getBet());
-            } else if (!hand.has5CardCharlie() && dealer.has5CardCharlie()) {
-                player.subBalance(hand.getBet());
-            } else {
-                int outcome = compareHandValue(hand);
-                if (!hand.isBusted() && (dealer.isBusted() || outcome > 0)) {
-                    player.addBalance(hand.getBet());
-                } else if (!dealer.isBusted() && (hand.isBusted()) || outcome < 0) {
-                    player.subBalance(hand.getBet());
-                }
             }
         }
-    }
-
-    // EFFECTS: returns a value > 0 if player's hand value > dealer's hand value, 0 if =, a value < 0 if <
-    private int compareHandValue(Hand hand) {
-        int playerHandValue = hand.getCardsValue();
-        int dealerHandValue = dealer.getCardsValue();
-        if (hand.hasAdjustableAce()) {
-            playerHandValue += 10;
-        }
-        if (dealer.hasAdjustableAce()) {
-            dealerHandValue += 10;
-        }
-        return Integer.compare(playerHandValue, dealerHandValue);
     }
 
     // EFFECTS: returns true if player bust or has 5-card Charlie else false
@@ -311,9 +298,9 @@ public class Blackjack {
     private boolean playerFirstTurn() {
         String decision = askFirstDecision();
         switch (decision) {
-            case "h": player.getHands().get(0).addCard(deck.deal());
-                if (!checkBustedOr5CardCharlie(player.getHands().get(0))) {
-                    playerRestTurn();
+            case "h": player.getHand().addCard(deck.deal());
+                if (!checkBustedOr5CardCharlie(player.getHand())) {
+                    playerRestTurn(player.getHand());
                 }
                 return true;
             case "s": return true;
@@ -322,8 +309,8 @@ public class Blackjack {
             case "sp": runSplit();
                 return true;
             case "su":
-                player.getHands().get(0).setBet((int) Math.round((double) player.getHands().get(0).getBet() / 2));
-                player.subBalance(player.getHands().get(0).getBet());
+                player.getHand().setBet((int) Math.round((double) player.getHand().getBet() / 2));
+                player.subBalance(player.getHand().getBet());
             default: return false;
         }
     }
@@ -337,13 +324,13 @@ public class Blackjack {
             switch (decision) {
                 case "h": case "s": case "su": return decision;
                 case "d":
-                    if (player.getHands().get(0).getBet() * 2 <= player.getBalance()) {
+                    if (player.getHand().getBet() * 2 <= player.getBalance()) {
                         return decision;
                     }
                     break;
                 case "sp":
-                    if (player.getHands().get(0).canSplit()
-                            && player.getHands().get(0).getBet() * 2 <= player.getBalance()) {
+                    if (player.getHand().canSplit()
+                            && player.getHand().getBet() * 2 <= player.getBalance()) {
                         return decision;
                     }
                     break;
@@ -354,7 +341,7 @@ public class Blackjack {
 
     // EFFECTS: prints first decisions
     private void printFirstDecisions() {
-        System.out.println("\n" + player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
+        System.out.println("\n" + player.getName() + "'s Hand: " + player.getHand().getCardsString());
         System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
         System.out.println("Select decision from:");
         System.out.println("\th -> hit");
@@ -367,45 +354,41 @@ public class Blackjack {
     // MODIFIES: this
     // EFFECTS: runs double down as first decision
     private void runDoubleDown() {
-        player.getHands().get(0).setBet(player.getHands().get(0).getBet() * 2);
-        player.getHands().get(0).addCard(deck.deal());
-        System.out.println(player.getName() + "'s Hand: " + player.getHands().get(0).getCardsString());
-        checkBustedOr5CardCharlie(player.getHands().get(0));
+        player.getHand().setBet(player.getHand().getBet() * 2);
+        player.getHand().addCard(deck.deal());
+        System.out.println(player.getName() + "'s Hand: " + player.getHand().getCardsString());
+        checkBustedOr5CardCharlie(player.getHand());
     }
 
     // MODIFIES: this
     // EFFECTS: runs split as first decision
     private void runSplit() {
-        Hand hand = new Hand();
-        hand.addCard(player.getHands().get(0).removeCard(1));
-        hand.setBet(player.getHands().get(0).getBet());
-        player.addHand(hand);
-        for (Hand h : player.getHands()) {
-            h.addCard(deck.deal());
-            System.out.println(player.getName() + "'s Hand: " + h.getCardsString());
-        }
-        playerRestTurn();
+        player.setAltHand(player.getHand().split());
+        player.getHand().addCard(deck.deal());
+        player.getAltHand().addCard(deck.deal());
+        System.out.println(player.getName() + "'s Hand: " + player.getHand().getCardsString());
+        System.out.println(player.getName() + "'s Hand: " + player.getAltHand().getCardsString());
+        playerRestTurn(player.getHand());
+        playerRestTurn(player.getAltHand());
     }
 
     // MODIFIES: this
     // EFFECTS: runs rest turns of player
-    private void playerRestTurn() {
-        for (Hand hand : player.getHands()) {
-            boolean running = true;
-            while (running) {
-                String decision = askRestDecision(hand);
-                switch (decision) {
-                    case "h": hand.addCard(deck.deal());
-                        if (checkBustedOr5CardCharlie(hand)) {
-                            running = false;
-                        }
-                        break;
-                    case "d": hand.setBet(hand.getBet() * 2);
-                        hand.addCard(deck.deal());
-                        checkBustedOr5CardCharlie(hand);
-                    case "s": running = false;
-                        break;
-                }
+    private void playerRestTurn(Hand hand) {
+        boolean running = true;
+        while (running) {
+            String decision = askRestDecision(hand);
+            switch (decision) {
+                case "h": hand.addCard(deck.deal());
+                    if (checkBustedOr5CardCharlie(hand)) {
+                        running = false;
+                    }
+                    break;
+                case "d": hand.setBet(hand.getBet() * 2);
+                    hand.addCard(deck.deal());
+                    checkBustedOr5CardCharlie(hand);
+                case "s": running = false;
+                    break;
             }
         }
     }

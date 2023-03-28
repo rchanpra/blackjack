@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-// Represents a hand of a player or a dealer in a game of blackjack
+// Represents a hand in a game of blackjack
 public class Hand {
     protected ArrayList<Card> cards;
     private int bet;
@@ -38,6 +38,9 @@ public class Hand {
         for (Card card : cards) {
             value += card.getValue();
         }
+        if (hasAce() && value <= 11) {
+            value += 10;
+        }
         return value;
     }
 
@@ -47,9 +50,13 @@ public class Hand {
         for (Card card : cards) {
             result += card.getCard() + " ";
         }
-        result += "(" + getCardsValue();
-        if (hasAdjustableAce()) {
-            result += "/" + (getCardsValue() + 10);
+        int value = 0;
+        for (Card card : cards) {
+            value += card.getValue();
+        }
+        result += "(" + value;
+        if (hasAce() && value <= 11) {
+            result += "/" + getCardsValue();
         }
         return result + ")";
     }
@@ -60,17 +67,19 @@ public class Hand {
         cards.add(card);
     }
 
-    // MODIFIES: this
-    // EFFECTS: removes card at index from cards and returns it
-    public Card removeCard(int index) {
-        return cards.remove(index);
+    // MODIFIES: this, deck
+    // EFFECTS: adds cards dealt from deck to cards
+    public void draw(Deck deck) {
+        cards.add(deck.deal());
     }
 
     // MODIFIES: this
-    // EFFECTS: reinitialize cards and bet
-    public void reset() {
-        cards = new ArrayList<>();
-        bet = 0;
+    // EFFECTS: returns new hand split from this hand
+    public Hand split() {
+        Hand hand = new Hand();
+        hand.addCard(cards.remove(1));
+        hand.setBet(bet);
+        return hand;
     }
 
     // EFFECTS: returns true if cards value is greater than 21 else false
@@ -88,19 +97,19 @@ public class Hand {
         return false;
     }
 
-    // EFFECTS: returns true if cards have an ace and cards value is 11 or less else false
-    public boolean hasAdjustableAce() {
-        return hasAce() && getCardsValue() <= 11;
-    }
-
-    // EFFECTS: returns true if cards have 2 cards with an ace and value is 11 else false
+    // EFFECTS: returns true if cards have 2 cards and a value of 21 else false
     public boolean hasBlackjack() {
-        return cards.size() == 2 && hasAce() & getCardsValue() == 11;
+        return cards.size() == 2 && getCardsValue() == 21;
     }
 
     // EFFECTS: returns true if cards have 5 cards and not busted else false
     public boolean has5CardCharlie() {
         return cards.size() == 5 && !isBusted();
+    }
+
+    // EFFECTS: returns true if neither calls to has5CardCharlie() and isBusted() return true
+    public boolean canDraw() {
+        return !(has5CardCharlie() || isBusted());
     }
 
     // EFFECTS: returns true if cards have 2 cards with same rank else false

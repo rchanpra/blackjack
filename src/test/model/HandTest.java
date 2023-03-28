@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Unit tests for the Hand class
 public class HandTest {
     private Hand hand;
     private Card card1;
@@ -15,6 +14,7 @@ public class HandTest {
     private Card card5;
     private Card card6;
     private Card card7;
+    private Deck deck;
 
     @BeforeEach
     public void runBefore() {
@@ -26,6 +26,7 @@ public class HandTest {
         card5 = new Card(1, 3);
         card6 = new Card(11, 3);
         card7 = new Card(4, 2);
+        deck = new Deck();
     }
 
     @Test
@@ -54,7 +55,7 @@ public class HandTest {
         assertEquals(0, hand.getCardsValue());
         hand.addCard(card1);
         hand.addCard(card2);
-        assertEquals(8, hand.getCardsValue());
+        assertEquals(18, hand.getCardsValue());
     }
 
     @Test
@@ -78,21 +79,23 @@ public class HandTest {
     }
 
     @Test
-    public void testRemoveCard() {
-        hand.addCard(card1);
-        hand.addCard(card2);
-        hand.addCard(card3);
-        assertEquals(card1, hand.removeCard(0));
-        assertEquals(card2, hand.removeCard(0));
-        assertEquals(card3, hand.removeCard(0));
+    public void testDraw() {
+        assertEquals(0, hand.getCards().size());
+        assertEquals(52, deck.getCards().size());
+        hand.draw(deck);
+        assertEquals(1, hand.getCards().size());
+        assertEquals(51, deck.getCards().size());
     }
 
     @Test
-    public void testReset() {
+    public void testSplit() {
         hand.addCard(card1);
-        hand.reset();
-        assertEquals(0, hand.getCards().size());
-        assertEquals(0, hand.getCardsValue());
+        hand.addCard(card3);
+        Hand newHand = hand.split();
+        assertEquals(1, newHand.getCards().size());
+        assertEquals(1, hand.getCards().size());
+        assertEquals(card1, hand.getCards().get(0));
+        assertEquals(card3, newHand.getCards().get(0));
     }
 
     @Test
@@ -116,17 +119,6 @@ public class HandTest {
     }
 
     @Test
-    public void testHasAdjustableAce() {
-        assertFalse(hand.hasAdjustableAce());
-        hand.addCard(card2);
-        assertFalse(hand.hasAdjustableAce());
-        hand.addCard(card1);
-        assertTrue(hand.hasAdjustableAce());
-        hand.addCard(card3);
-        assertFalse(hand.hasAdjustableAce());
-    }
-
-    @Test
     public void testHasBlackjack() {
         assertFalse(hand.hasBlackjack());
         hand.addCard(card1);
@@ -135,7 +127,7 @@ public class HandTest {
         assertTrue(hand.hasBlackjack());
         hand.addCard(card2);
         assertFalse(hand.hasBlackjack());
-        hand.reset();
+        hand = new Hand();
         assertFalse(hand.hasBlackjack());
         hand.addCard(card7);
         assertFalse(hand.hasBlackjack());
@@ -143,7 +135,7 @@ public class HandTest {
         assertFalse(hand.hasBlackjack());
         hand.addCard(card1);
         assertFalse(hand.hasBlackjack());
-        hand.reset();
+        hand = new Hand();
         assertFalse(hand.hasBlackjack());
         hand.addCard(card1);
         assertFalse(hand.hasBlackjack());
@@ -166,7 +158,7 @@ public class HandTest {
         assertFalse(hand.has5CardCharlie());
         hand.addCard(card5);
         assertTrue(hand.has5CardCharlie());
-        hand.reset();
+        hand = new Hand();
         assertFalse(hand.has5CardCharlie());
         hand.addCard(card1);
         assertFalse(hand.has5CardCharlie());
@@ -181,6 +173,41 @@ public class HandTest {
     }
 
     @Test
+    public void testCanDraw() {
+        assertTrue(hand.canDraw());
+        hand.addCard(card6);
+        assertTrue(hand.canDraw());
+        hand.addCard(card2);
+        assertTrue(hand.canDraw());
+        hand.addCard(card3);
+        assertFalse(hand.canDraw());
+        hand = new Hand();
+        assertTrue(hand.canDraw());
+        hand.addCard(card1);
+        assertTrue(hand.canDraw());
+        hand.addCard(card2);
+        assertTrue(hand.canDraw());
+        hand.addCard(card3);
+        assertTrue(hand.canDraw());
+        hand.addCard(card4);
+        assertTrue(hand.canDraw());
+        hand.addCard(card5);
+        assertFalse(hand.canDraw());
+        hand = new Hand();
+        assertTrue(hand.canDraw());
+        hand.addCard(card1);
+        assertTrue(hand.canDraw());
+        hand.addCard(card2);
+        assertTrue(hand.canDraw());
+        hand.addCard(card3);
+        assertTrue(hand.canDraw());
+        hand.addCard(card4);
+        assertTrue(hand.canDraw());
+        hand.addCard(card6);
+        assertFalse(hand.canDraw());
+    }
+
+    @Test
     public void testCanSplit() {
         assertFalse(hand.canSplit());
         hand.addCard(card4);
@@ -189,7 +216,7 @@ public class HandTest {
         assertTrue(hand.canSplit());
         hand.addCard(card1);
         assertFalse(hand.canSplit());
-        hand.reset();
+        hand = new Hand();
         hand.addCard(card1);
         hand.addCard(card2);
         assertFalse(hand.canSplit());

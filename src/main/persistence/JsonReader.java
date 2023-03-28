@@ -41,10 +41,10 @@ public class JsonReader {
     private Player parseWorkRoom(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         int balance = jsonObject.getInt("balance");
-        int initial = jsonObject.getInt("initial");
+        int initial = jsonObject.getInt("starting");
         int goal = jsonObject.getInt("goal");
         Player player = new Player(name, balance, initial, goal);
-        JSONArray jsonArray = jsonObject.getJSONArray("hands");
+        JSONArray jsonArray = jsonObject.getJSONArray("handHistory");
         for (Object json : jsonArray) {
             JSONObject hand = (JSONObject) json;
             addHand(player, hand);
@@ -63,7 +63,7 @@ public class JsonReader {
             addCard(hand, card);
         }
         hand.setBet(bet);
-        player.addHand(hand);
+        player.addHandHistory(hand);
     }
 
     // MODIFIES: hand

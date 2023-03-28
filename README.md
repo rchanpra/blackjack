@@ -1,4 +1,4 @@
-# Blackjack
+# Blackjack Simulator
 
 ## Introduction
 
@@ -16,7 +16,7 @@ dealer, in which the dealer will draw until the dealer's hand is at least 17 in 
 1. Bet
 2. Inspect cards dealt and make decisions
 3. Wait for the dealer's turn
-4. Repeat until broke or satisfy
+4. Repeat until broke, reach goal, or satisfy
 
 ## Targeted Users
 
@@ -42,11 +42,22 @@ result, I am rather passionate about it. Therefore, this project could also be c
 
 ## Citation
 
-The basis of the persistence module has been adapted from the CPSC210 team's work. You can find their code here:
+- The basis of the persistence module has been adapted from the CPSC210 team's work. You can find their code here:
 https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+- The PNG files of playing cards were taken from an open source archive, which is located at the following URL:
+https://code.google.com/archive/p/vector-playing-cards/.
 
-## Upcoming Updates
+## Future Plans
 
-- Add multiplayer
-- Add GUI
-- Add Baccarat and/or Pok Deng and potentially turn application into Playing Cards Simulator
+- Add multiple players
+- Add Baccarat and Pok Deng and potentially turn application into Playing Cards Simulator
+
+## Instructions for Grader
+
+- You can generate the first required action related to adding Xs to a Y by...
+- You can generate the second required action related to adding Xs to a Y by...
+- You can locate my visual component by...
+- You can save the state of my application by...
+- You can reload the state of my application by...
+- You can create the *blackjack.json* file by saving and exiting the application, after which the file will appear in the 
+data folder.
