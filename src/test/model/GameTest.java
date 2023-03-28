@@ -2,10 +2,6 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import persistence.JsonWriter;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -320,5 +316,10 @@ public class GameTest {
         game.setJsonReaderDestination(destination);
         game.savePlayer();
         assertTrue(game.loadPlayer());
+        destination = "";
+        game.setJsonWriterDestination(destination);
+        game.setJsonReaderDestination(destination);
+        game.savePlayer();
+        assertFalse(game.loadPlayer());
     }
 }
