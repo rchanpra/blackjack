@@ -86,16 +86,12 @@ public class Game {
             } else {
                 player.addBalance(hand.getBet() * 2);
             }
-        } else if (!hand.isBusted()) {
-            if (!dealer.getHand().isBusted()) {
-                if (hand.getCardsValue() > dealer.getHand().getCardsValue()) {
-                    player.addBalance(hand.getBet() * 2);
-                } else if (hand.getCardsValue() == dealer.getHand().getCardsValue()) {
-                    player.addBalance(hand.getBet());
-                }
-            } else {
-                player.addBalance(hand.getBet() * 2);
-            }
+        } else if (!hand.isBusted()
+                && (dealer.getHand().isBusted() || hand.getCardsValue() > dealer.getHand().getCardsValue())) {
+            player.addBalance(hand.getBet() * 2);
+        } else if ((hand.isBusted() && dealer.getHand().isBusted())
+                || hand.getCardsValue() == dealer.getHand().getCardsValue()) {
+            player.addBalance(hand.getBet());
         }
     }
 
@@ -141,15 +137,26 @@ public class Game {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: reinitialize jsonWriter with new destination
+    public void setJsonWriterDestination(String destination) {
+        jsonWriter = new JsonWriter(destination);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: reinitialize jsonReader with new destination
+    public void setJsonReaderDestination(String destination) {
+        jsonReader = new JsonReader(destination);
+    }
+
     // EFFECTS: saves player to file
     public void savePlayer() {
         try {
             jsonWriter.open();
             jsonWriter.write(player);
             jsonWriter.close();
-            System.out.println("Saved " + player.getName() + " to " + JSON_STORE);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
+            e.getCause();
         }
     }
 
@@ -158,10 +165,8 @@ public class Game {
     public boolean loadPlayer() {
         try {
             player = jsonReader.read();
-            System.out.println("Loaded " + player.getName() + " from " + JSON_STORE);
             return true;
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
             return false;
         }
     }

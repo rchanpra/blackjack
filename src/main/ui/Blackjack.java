@@ -141,10 +141,8 @@ public class Blackjack {
     }
 
     // EFFECTS: runs menu
-    @SuppressWarnings("methodlength")
     private boolean menu() {
         while (true) {
-            System.out.println("\n" + player.getBalanceString());
             if (gameEnd()) {
                 return false;
             }
@@ -153,13 +151,11 @@ public class Blackjack {
             String selection = input.next().toLowerCase();
             switch (selection) {
                 case "p": return true;
-                case "h": System.out.println("Previous Hand: " + player.getHandHistoryString());
+                case "h": System.out.println("Hand History: " + player.getHandHistoryString());
                     enterToContinue();
                     break;
-                case "i": System.out.println("Initial Balance: " + player.getStarting());
-                    enterToContinue();
-                    break;
-                case "g": System.out.println("Goal Balance: " + player.getGoal());
+                case "b": System.out.println("Starting Balance: " + player.getStarting());
+                    System.out.println("Goal Balance: " + player.getGoal());
                     enterToContinue();
                     break;
                 case "s": savePlayer();
@@ -188,11 +184,11 @@ public class Blackjack {
 
     // EFFECTS: print selections
     private void printSelection() {
+        System.out.println("\n" + player.getBalanceString());
         System.out.println("Select from:");
         System.out.println("\tp -> play");
-        System.out.println("\th -> previous hand");
-        System.out.println("\ti -> initial balance");
-        System.out.println("\tg -> goal balance");
+        System.out.println("\th -> hand history");
+        System.out.println("\tb -> balance stats");
         System.out.println("\ts -> save");
         System.out.println("\tq -> quit");
     }
