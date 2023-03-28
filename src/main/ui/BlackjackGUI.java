@@ -213,7 +213,6 @@ public class BlackjackGUI extends JFrame {
                 addDealerHand();
                 endCL.show(end, "dealer");
             }
-            setInfo();
         });
         nextButton1.addActionListener(e -> {
             if (game.getDealer().canDraw()) {
