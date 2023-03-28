@@ -316,7 +316,7 @@ public class GameTest {
         game.setJsonReaderDestination(destination);
         game.savePlayer();
         assertTrue(game.loadPlayer());
-        game.setJsonWriterDestination("./data/<invalidFile>.json");
+        game.setJsonWriterDestination("");
         game.setJsonReaderDestination("./data/nonExistentFile.json");
         game.savePlayer();
         assertFalse(game.loadPlayer());
