@@ -272,6 +272,7 @@ public class BlackjackGUI extends JFrame {
             game.playerFirstTurn("su");
             decisionCL.show(decision, "end");
             endCL.show(end, "endend");
+            game.shuffle();
             setInfo();
         });
     }
