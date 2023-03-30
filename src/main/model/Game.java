@@ -52,6 +52,8 @@ public class Game {
     // MODIFIES: this
     // EFFECTS: collects cards and shuffles deck
     public void deal() {
+        // player.getHand().addCard(new Card(2, 1));
+        // player.getHand().addCard(new Card(2, 2));
         player.getHand().draw(deck);
         dealer.getHand().draw(deck);
         player.getHand().draw(deck);

@@ -68,6 +68,7 @@ public class BlackjackGUI extends JFrame {
     private JLabel balanceLabel;
     private JLabel betLabel;
     private JLabel titleLabel;
+    private JPanel tobs;
     private CardLayout paneCL;
     private CardLayout blackjackCL;
     private CardLayout decisionCL;
@@ -91,6 +92,10 @@ public class BlackjackGUI extends JFrame {
     // EFFECTS: setups JFrame
     public void setup() {
         titleLabel.setFont(new Font(titleLabel.getFont().getName(), Font.BOLD, 32));
+        JLabel tobsLabel = new JLabel();
+        tobsLabel.setIcon(new ImageIcon(new ImageIcon("./data/tobs.jpg").getImage()
+                .getScaledInstance(972 / 2, 648 / 2, java.awt.Image.SCALE_SMOOTH)));
+        tobs.add(tobsLabel);
         initializeCL();
         setTransparentPanels();
         setStartButtons();
