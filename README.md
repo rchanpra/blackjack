@@ -10,6 +10,7 @@ dealer.
 ## Blackjack Ruling
 - Decisions are hit, stand, and double down.
 - First decisions also include split and surrender.
+- Splitting can only be done when 2 initial cards dealt have the same rank.
 - Blackjack is the strongest, followed by 5-card Charlie, and then normal hand.
 - Winnings are 1:1.
 - Dealer will hit until their hand value is at least 17 with ace counting as 11 without busting.
@@ -35,6 +36,7 @@ result, I am rather passionate about it. Therefore, this project could also be c
 
 - As a user, I want to be able to have a deck of 52 unique cards.
 - As a user, I want to be able to draw cards from the deck and add them to my hand.
+- As a user, I want to be able to choose to hit, stand, double-down, split, and surrender as my decision.
 - As a user, I want to be able to have a balance that I can deposit and withdraw from.
 - As a user, I want to be able to bet against a dealer, win/lose/tie, and have payouts.
 - As a user, I want to be able to repeat rounds of blackjack until I am satisfied.
@@ -53,9 +55,11 @@ https://code.google.com/archive/p/vector-playing-cards/.
 - You can generate the first required action related to adding Xs to a Y by...
   - clicking the play button in which cards are added to a hand(s).
 - You can generate the second required action related to adding Xs to a Y by...
-  - choosing to hit/double-down/split as your decision in which cards are added to a hand(s).
+  - choosing to hit or double-down as your decision in which cards are added to a hand(s).
+  - choosing split as your decision when the initial 2 cards dealt are of the same rank will remove a card from hand and 
+  add it to an alternative hand, then a card will be dealt to each hand from the deck.
 - You can locate my visual component by...
-  - running the Main class.
+  - looking inside the *cards* folder in the *data* folder
 - You can save the state of my application by...
   - clicking the save button in the main menu.
 - You can reload the state of my application by...
