@@ -61,3 +61,5 @@ https://code.google.com/archive/p/vector-playing-cards/.
   - clicking load in the start menu.
 - You can create the *blackjack.json* file by saving and exiting the application, after which the file will appear in 
 the data folder.
+- Additionally, when you clicked the play button, 52 cards are added to a new deck that will be used to play
+the new round of blackjack.
