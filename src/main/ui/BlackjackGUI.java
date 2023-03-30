@@ -450,7 +450,7 @@ public class BlackjackGUI extends JFrame {
         handPanel.setOpaque(false);
         JLabel valueLabel = new JLabel();
         valueLabel.setForeground(new Color(0xFFFFFF));
-        valueLabel.setText("Bet: " + hand.getBet() + " | Value: "+ hand.getCardsValue());
+        valueLabel.setText("Bet: " + hand.getBet() + " | Value: " + hand.getCardsValue());
         JPanel valuePanel = new JPanel();
         valuePanel.setOpaque(false);
         valuePanel.add(valueLabel);
