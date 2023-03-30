@@ -435,10 +435,41 @@ public class BlackjackGUI extends JFrame {
         handHistoryPanel.removeAll();
         List<JPanel> handPanels = new ArrayList<>();
         for (Hand hand : game.getPlayer().getHandHistory()) {
-            handPanels.add(getHandPanel(hand));
+            handPanels.add(getHandPanel1(hand));
         }
         for (JPanel handPanel : handPanels) {
             handHistoryPanel.add(handPanel);
         }
+        setVisible(true);
+    }
+
+    // EFFECTS: returns handPanel created from hand for hand history
+    public JPanel getHandPanel1(Hand hand) {
+        JPanel handPanel = new JPanel();
+        handPanel.setLayout(new BorderLayout());
+        handPanel.setOpaque(false);
+        JLabel valueLabel = new JLabel();
+        valueLabel.setForeground(new Color(0xFFFFFF));
+        valueLabel.setText("Bet: " + hand.getBet() + " | Value: "+ hand.getCardsValue());
+        JPanel valuePanel = new JPanel();
+        valuePanel.setOpaque(false);
+        valuePanel.add(valueLabel);
+        handPanel.add(valuePanel, BorderLayout.NORTH);
+        handPanel.add(getCardsPanel1(hand), BorderLayout.CENTER);
+        return handPanel;
+    }
+
+    // EFFECTS: returns cardsPanel created from hand for hand history
+    public JPanel getCardsPanel1(Hand hand) {
+        JPanel cardsPanel = new JPanel();
+        cardsPanel.setOpaque(false);
+        List<JLabel> cardLabels = new ArrayList<>();
+        for (Card card : hand.getCards()) {
+            cardLabels.add(getCardLabel(card, 62, 90));
+        }
+        for (JLabel l : cardLabels) {
+            cardsPanel.add(l);
+        }
+        return cardsPanel;
     }
 }

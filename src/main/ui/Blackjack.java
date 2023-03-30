@@ -178,7 +178,6 @@ public class Blackjack {
         System.out.println("Select from:");
         System.out.println("\tp -> play");
         System.out.println("\th -> hand history");
-        System.out.println("\tb -> balance stats");
         System.out.println("\ts -> save");
         System.out.println("\tq -> quit");
     }
