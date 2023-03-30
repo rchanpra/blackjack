@@ -86,9 +86,8 @@ public class Blackjack {
                 case "n": System.out.println("Enter your name: ");
                     System.out.print(">>> ");
                     String name = input.next();
-                    int initial = askInitial();
-                    int goal = askGoal(initial);
-                    player = new Player(name, initial, initial, goal);
+                    int balance = askInitial();
+                    player = new Player(name, balance);
                     running = false;
                     break;
                 case "l": running = !loadPlayer();
@@ -154,10 +153,6 @@ public class Blackjack {
                 case "h": System.out.println("Hand History: " + player.getHandHistoryString());
                     enterToContinue();
                     break;
-                case "b": System.out.println("Starting Balance: " + player.getStarting());
-                    System.out.println("Goal Balance: " + player.getGoal());
-                    enterToContinue();
-                    break;
                 case "s": savePlayer();
                     enterToContinue();
                     break;
@@ -171,11 +166,6 @@ public class Blackjack {
     private boolean gameEnd() {
         if (player.getBalance() <= 0) {
             System.out.println("Broke. Game Over!");
-            savePlayer();
-            return true;
-        }
-        if (player.getBalance() >= player.getGoal()) {
-            System.out.println("Goal reached. Congratulations!");
             savePlayer();
             return true;
         }

@@ -41,9 +41,7 @@ public class JsonReader {
     private Player parseWorkRoom(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         int balance = jsonObject.getInt("balance");
-        int initial = jsonObject.getInt("starting");
-        int goal = jsonObject.getInt("goal");
-        Player player = new Player(name, balance, initial, goal);
+        Player player = new Player(name, balance);
         JSONArray jsonArray = jsonObject.getJSONArray("handHistory");
         for (Object json : jsonArray) {
             JSONObject hand = (JSONObject) json;

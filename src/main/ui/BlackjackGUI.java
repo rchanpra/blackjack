@@ -17,8 +17,10 @@ public class BlackjackGUI extends JFrame {
     private JPanel blackjack;
     private JPanel menu;
     private JPanel history;
-    private JPanel handHistory;
-    private JPanel betting;
+    private JPanel deposit;
+    private JPanel withdraw;
+    private JPanel handHistoryPanel;
+    private JPanel bet;
     private JPanel round;
     private JPanel dealerHand;
     private JPanel playerHand;
@@ -29,14 +31,18 @@ public class BlackjackGUI extends JFrame {
     private JPanel end;
     private JPanel reveal;
     private JPanel dealer;
-    private JPanel endend;
+    private JPanel conclusion;
     private JButton newButton;
     private JButton loadButton;
     private JButton createButton;
     private JButton playButton;
+    private JButton depositButton;
+    private JButton withdrawButton;
     private JButton historyButton;
     private JButton saveButton;
     private JButton exitButton;
+    private JButton depositButton1;
+    private JButton withdrawButton1;
     private JButton betButton;
     private JButton hitButton;
     private JButton standButton;
@@ -54,14 +60,14 @@ public class BlackjackGUI extends JFrame {
     private JButton nextButton;
     private JButton nextButton1;
     private JTextField nameInput;
-    private JTextField initialInput;
-    private JTextField goalInput;
+    private JTextField balanceInput;
     private JTextField betInput;
-    private JLabel name;
-    private JLabel balance;
-    private JLabel initial;
-    private JLabel goal;
-    private JLabel bet;
+    private JTextField depositInput;
+    private JTextField withdrawInput;
+    private JLabel nameLabel;
+    private JLabel balanceLabel;
+    private JLabel betLabel;
+    private JLabel titleLabel;
     private CardLayout paneCL;
     private CardLayout blackjackCL;
     private CardLayout decisionCL;
@@ -75,7 +81,6 @@ public class BlackjackGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(true);
         setSize(800, 600);
-        setMaximumSize(new Dimension(1600, 1200));
         getContentPane().setBackground(new Color(0x013220));
         add(pane);
         setVisible(true);
@@ -85,12 +90,14 @@ public class BlackjackGUI extends JFrame {
     // MODIFIES: this
     // EFFECTS: setups JFrame
     public void setup() {
+        titleLabel.setFont(new Font(titleLabel.getFont().getName(), Font.BOLD, 32));
         initializeCL();
         setTransparentPanels();
         setStartButtons();
         setMenuButtons();
+        setSubMenuButtons();
         setTransitionButtons();
-        setTransitionButtons1();
+        setNextButtons();
         setFirstButtons();
         setFirstButtons1();
         setRestButtons();
@@ -116,8 +123,10 @@ public class BlackjackGUI extends JFrame {
         blackjack.setOpaque(false);
         menu.setOpaque(false);
         history.setOpaque(false);
-        handHistory.setOpaque(false);
-        betting.setOpaque(false);
+        deposit.setOpaque(false);
+        withdraw.setOpaque(false);
+        handHistoryPanel.setOpaque(false);
+        bet.setOpaque(false);
         round.setOpaque(false);
         dealerHand.setOpaque(false);
         playerHand.setOpaque(false);
@@ -128,11 +137,11 @@ public class BlackjackGUI extends JFrame {
         end.setOpaque(false);
         reveal.setOpaque(false);
         dealer.setOpaque(false);
-        endend.setOpaque(false);
+        conclusion.setOpaque(false);
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for start
+    // EFFECTS: adds ActionListener to buttons for start panel
     public void setStartButtons() {
         newButton.addActionListener(e -> {
             paneCL.show(pane, "create");
@@ -140,31 +149,32 @@ public class BlackjackGUI extends JFrame {
         loadButton.addActionListener(e -> {
             game.loadPlayer();
             paneCL.show(pane, "board");
-            setInfo();
-            if (game.gameEnd()) {
-                dispose();
-            }
+            updateStatus();
         });
         createButton.addActionListener(e -> {
-            game.setPlayer(new Player(nameInput.getText(), Integer.parseInt(initialInput.getText()),
-                    Integer.parseInt(initialInput.getText()), Integer.parseInt(goalInput.getText())));
+            game.setPlayer(new Player(nameInput.getText(), Integer.parseInt(balanceInput.getText())));
             paneCL.show(pane, "board");
-            setInfo();
-            if (game.gameEnd()) {
-                dispose();
-            }
+            updateStatus();
         });
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for menu
+    // EFFECTS: adds ActionListener to buttons in menu panel
     public void setMenuButtons() {
         playButton.addActionListener(e -> {
-            blackjackCL.show(blackjack, "betting");
+            if (game.getPlayer().getBalance() > 0) {
+                blackjackCL.show(blackjack, "bet");
+            }
+        });
+        depositButton.addActionListener(e -> {
+            blackjackCL.show(blackjack, "deposit");
+        });
+        withdrawButton.addActionListener(e -> {
+            blackjackCL.show(blackjack, "withdraw");
         });
         historyButton.addActionListener(e -> {
             blackjackCL.show(blackjack, "history");
-            addHandHistory();
+            setHandHistoryPanel();
         });
         saveButton.addActionListener(e -> {
             game.savePlayer();
@@ -175,36 +185,52 @@ public class BlackjackGUI extends JFrame {
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for transition
-    public void setTransitionButtons() {
-        betButton.addActionListener(e -> {
-            game.getPlayer().getHand().setBet(Integer.parseInt(betInput.getText()));
-            betInput.setText("");
-            blackjackCL.show(blackjack, "round");
-            game.startRound();
-            addPlayerHand();
-            addDealerHandInitial();
-            if (game.getPlayer().getHand().hasBlackjack()) {
-                decisionCL.show(decision, "end");
-            }
-            setInfo();
+    // EFFECTS: adds ActionListener to buttons in submenu panels
+    public void setSubMenuButtons() {
+        depositButton1.addActionListener(e -> {
+            game.getPlayer().addBalance(Integer.parseInt(depositInput.getText()));
+            depositInput.setText("");
+            updateStatus();
+            blackjackCL.show(blackjack, "menu");
+        });
+        withdrawButton1.addActionListener(e -> {
+            game.getPlayer().subBalance(Integer.parseInt(withdrawInput.getText()));
+            depositInput.setText("");
+            updateStatus();
+            blackjackCL.show(blackjack, "menu");
         });
         backButton.addActionListener(e -> {
             blackjackCL.show(blackjack, "menu");
+        });
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds ActionListener to transition buttons
+    public void setTransitionButtons() {
+        betButton.addActionListener(e -> {
+            if (game.getPlayer().getBalance() >= Integer.parseInt(betInput.getText())) {
+                game.getPlayer().getHand().setBet(Integer.parseInt(betInput.getText()));
+                betInput.setText("");
+                blackjackCL.show(blackjack, "round");
+                game.startRound();
+                addPlayerHand();
+                addDealerHandInitial();
+                if (game.getPlayer().getHand().hasBlackjack()) {
+                    decisionCL.show(decision, "end");
+                }
+                updateStatus();
+            }
         });
         backButton1.addActionListener(e -> {
             blackjackCL.show(blackjack, "menu");
             decisionCL.show(decision, "first");
             endCL.show(end, "reveal");
-            if (game.gameEnd()) {
-                dispose();
-            }
         });
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for transition
-    public void setTransitionButtons1() {
+    // EFFECTS: adds ActionListener to next buttons
+    public void setNextButtons() {
         nextButton.addActionListener(e -> {
             if (game.getPlayer().getAltHand() != null && temp) {
                 decisionCL.show(decision, "split");
@@ -224,14 +250,14 @@ public class BlackjackGUI extends JFrame {
                     game.payout(game.getPlayer().getAltHand());
                 }
                 game.shuffle();
-                setInfo();
-                endCL.show(end, "endend");
+                updateStatus();
+                endCL.show(end, "conclusion");
             }
         });
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for first
+    // EFFECTS: adds ActionListener to buttons in first panel
     public void setFirstButtons() {
         hitButton.addActionListener(e -> {
             game.playerFirstTurn("h");
@@ -251,13 +277,13 @@ public class BlackjackGUI extends JFrame {
                 game.playerFirstTurn("d");
                 addPlayerHand();
                 decisionCL.show(decision, "end");
-                setInfo();
+                updateStatus();
             }
         });
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for first
+    // EFFECTS: adds ActionListener to buttons in first panel
     public void setFirstButtons1() {
         splitButton.addActionListener(e -> {
             if (game.getPlayer().getHand().canSplit()) {
@@ -265,20 +291,20 @@ public class BlackjackGUI extends JFrame {
                 game.playerFirstTurn("sp");
                 addPlayerHand();
                 decisionCL.show(decision, "rest");
-                setInfo();
+                updateStatus();
             }
         });
         surrenderButton.addActionListener(e -> {
             game.playerFirstTurn("su");
             decisionCL.show(decision, "end");
-            endCL.show(end, "endend");
+            endCL.show(end, "conclusion");
             game.shuffle();
-            setInfo();
+            updateStatus();
         });
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for rest
+    // EFFECTS: adds ActionListener to buttons in rest panel
     public void setRestButtons() {
         hitButton1.addActionListener(e -> {
             game.playerRestTurn(game.getPlayer().getHand(), "h");
@@ -298,13 +324,13 @@ public class BlackjackGUI extends JFrame {
                 game.playerRestTurn(game.getPlayer().getHand(), "d");
                 addPlayerHand();
                 decisionCL.show(decision, "end");
-                setInfo();
+                updateStatus();
             }
         });
     }
 
     // MODIFIES: this
-    // EFFECTS: add ActionListener to button for split
+    // EFFECTS: adds ActionListener to buttons in split panel
     public void setSplitButtons() {
         hitButton2.addActionListener(e -> {
             game.playerRestTurn(game.getPlayer().getAltHand(), "h");
@@ -323,38 +349,58 @@ public class BlackjackGUI extends JFrame {
             game.playerRestTurn(game.getPlayer().getAltHand(), "d");
             addPlayerHand();
             decisionCL.show(decision, "end");
-            setInfo();
+            updateStatus();
         });
     }
 
-    // EFFECTS: adds/updates player info at the top
-    public void setInfo() {
-        name.setText("Name: " + game.getPlayer().getName());
-        balance.setText("Balance: " + game.getPlayer().getBalance());
-        initial.setText("Starting: " + game.getPlayer().getStarting());
-        goal.setText("Goal: " + game.getPlayer().getGoal());
-        bet.setText("Bet: " + game.getPlayer().getHand().getBet());
+    // EFFECTS: updates status panel
+    public void updateStatus() {
+        nameLabel.setText("Name: " + game.getPlayer().getName());
+        balanceLabel.setText("Balance: " + game.getPlayer().getBalance());
+        betLabel.setText("Bet: " + game.getPlayer().getHand().getBet());
     }
 
     // EFFECTS: returns handPanel created from hand
     public JPanel getHandPanel(Hand hand) {
         JPanel handPanel = new JPanel();
+        handPanel.setLayout(new BorderLayout());
         handPanel.setOpaque(false);
-        List<JLabel> cards = new ArrayList<>();
-        for (Card c : hand.getCards()) {
-            ImageIcon icon = new ImageIcon("./data/cards/" + c.getCard() + ".png");
-            JLabel card = new JLabel();
-            card.setIcon(new ImageIcon(icon.getImage().getScaledInstance(125, 181, java.awt.Image.SCALE_SMOOTH)));
-            cards.add(card);
-        }
-        for (JLabel l : cards) {
-            handPanel.add(l);
-        }
+        JLabel valueLabel = new JLabel();
+        valueLabel.setForeground(new Color(0xFFFFFF));
+        valueLabel.setText(Integer.toString(hand.getCardsValue()));
+        JPanel valuePanel = new JPanel();
+        valuePanel.setOpaque(false);
+        valuePanel.add(valueLabel);
+        handPanel.add(valuePanel, BorderLayout.NORTH);
+        handPanel.add(getCardsPanel(hand), BorderLayout.CENTER);
         return handPanel;
     }
 
+    // EFFECTS: returns cardsPanel created from hand
+    public JPanel getCardsPanel(Hand hand) {
+        JPanel cardsPanel = new JPanel();
+        cardsPanel.setOpaque(false);
+        List<JLabel> cardLabels = new ArrayList<>();
+        for (Card card : hand.getCards()) {
+            cardLabels.add(getCardLabel(card, 125, 181));
+        }
+        for (JLabel l : cardLabels) {
+            cardsPanel.add(l);
+        }
+        return cardsPanel;
+    }
+
+    // EFFECTS: returns cardLabel created from card
+    public JLabel getCardLabel(Card card, int width, int height) {
+        ImageIcon icon = new ImageIcon("./data/cards/" + card.getCard() + ".png");
+        JLabel cardLabel = new JLabel();
+        cardLabel.setIcon(new ImageIcon(icon.getImage()
+                .getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH)));
+        return cardLabel;
+    }
+
     // MODIFIES: this
-    // EFFECTS: adds handPanel to playerHand
+    // EFFECTS: adds handPanel to playerHand panel
     public void addPlayerHand() {
         playerHand.removeAll();
         playerHand.add(getHandPanel(game.getPlayer().getHand()));
@@ -365,7 +411,7 @@ public class BlackjackGUI extends JFrame {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds handPanel to dealerHand
+    // EFFECTS: adds handPanel to dealerHand panel
     public void addDealerHand() {
         dealerHand.removeAll();
         dealerHand.add(getHandPanel(game.getDealer().getHand()));
@@ -373,29 +419,26 @@ public class BlackjackGUI extends JFrame {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a card labels to dealerHand
+    // EFFECTS: adds handPanel to dealerHand panel initially
     public void addDealerHandInitial() {
         dealerHand.removeAll();
+        dealerHand.add(getCardLabel(game.getDealer().getHand().getCards().get(0), 125, 181));
         JLabel card = new JLabel();
-        card.setIcon(new ImageIcon(new ImageIcon("./data/cards/" + game.getDealer().getHand().getCards().get(0)
-                .getCard() + ".png").getImage().getScaledInstance(125, 181, java.awt.Image.SCALE_SMOOTH)));
-        dealerHand.add(card);
-        JLabel card1 = new JLabel();
-        card1.setIcon(new ImageIcon(new ImageIcon("./data/back.png").getImage()
+        card.setIcon(new ImageIcon(new ImageIcon("./data/cards/XX.png").getImage()
                 .getScaledInstance(125, 181, java.awt.Image.SCALE_SMOOTH)));
-        dealerHand.add(card1);
+        dealerHand.add(card);
     }
 
     // MODIFIES: this
     // EFFECTS: adds handPanel(s) to handHistory
-    public void addHandHistory() {
-        handHistory.removeAll();
+    public void setHandHistoryPanel() {
+        handHistoryPanel.removeAll();
         List<JPanel> handPanels = new ArrayList<>();
-        for (Hand h : game.getPlayer().getHandHistory()) {
-            handPanels.add(getHandPanel(h));
+        for (Hand hand : game.getPlayer().getHandHistory()) {
+            handPanels.add(getHandPanel(hand));
         }
         for (JPanel handPanel : handPanels) {
-            handHistory.add(handPanel);
+            handHistoryPanel.add(handPanel);
         }
     }
 }

@@ -23,7 +23,7 @@
             <children>
               <component id="5926e" class="javax.swing.JButton" binding="newButton">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
@@ -32,7 +32,7 @@
               </component>
               <component id="fcb9f" class="javax.swing.JButton" binding="loadButton">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
@@ -74,10 +74,10 @@
                 </constraints>
                 <properties>
                   <foreground color="-1"/>
-                  <text value="Initial:"/>
+                  <text value="Balance: "/>
                 </properties>
               </component>
-              <component id="6edcf" class="javax.swing.JTextField" binding="initialInput">
+              <component id="6edcf" class="javax.swing.JTextField" binding="balanceInput">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -86,28 +86,9 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="d262d" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <foreground color="-1"/>
-                  <text value="Goal:"/>
-                </properties>
-              </component>
-              <component id="ebea1" class="javax.swing.JTextField" binding="goalInput">
-                <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties/>
-              </component>
               <component id="4289b" class="javax.swing.JButton" binding="createButton">
                 <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
@@ -135,18 +116,9 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="fe506" class="javax.swing.JButton" binding="historyButton">
-                        <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                          <gridbag weightx="0.0" weighty="0.0"/>
-                        </constraints>
-                        <properties>
-                          <text value="history"/>
-                        </properties>
-                      </component>
                       <component id="fb2c7" class="javax.swing.JButton" binding="playButton">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -155,7 +127,7 @@
                       </component>
                       <component id="76d12" class="javax.swing.JButton" binding="saveButton" default-binding="true">
                         <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
@@ -164,40 +136,49 @@
                       </component>
                       <component id="e5597" class="javax.swing.JButton" binding="exitButton">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
                           <text value="exit"/>
                         </properties>
                       </component>
-                    </children>
-                  </grid>
-                  <grid id="354c2" binding="betting" layout-manager="GridBagLayout">
-                    <constraints>
-                      <card name="betting"/>
-                    </constraints>
-                    <properties>
-                      <enabled value="true"/>
-                    </properties>
-                    <border type="none"/>
-                    <children>
-                      <component id="f8913" class="javax.swing.JTextField" binding="betInput">
+                      <component id="4a80b" class="javax.swing.JButton" binding="depositButton">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="-1"/>
-                          </grid>
-                          <gridbag weightx="0.0" weighty="0.0"/>
-                        </constraints>
-                        <properties/>
-                      </component>
-                      <component id="d7d9a" class="javax.swing.JButton" binding="betButton" default-binding="true">
-                        <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="bet"/>
+                          <text value="deposit"/>
+                        </properties>
+                      </component>
+                      <component id="88f91" class="javax.swing.JButton" binding="withdrawButton">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="withdraw"/>
+                        </properties>
+                      </component>
+                      <component id="fe506" class="javax.swing.JButton" binding="historyButton">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="history"/>
+                        </properties>
+                      </component>
+                      <component id="2298c" class="javax.swing.JLabel" binding="titleLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <foreground color="-257"/>
+                          <opaque value="false"/>
+                          <text value="BLACKJACK"/>
                         </properties>
                       </component>
                     </children>
@@ -329,9 +310,9 @@
                                   </component>
                                 </children>
                               </grid>
-                              <grid id="9ceda" binding="endend" layout-manager="GridBagLayout">
+                              <grid id="9ceda" binding="conclusion" layout-manager="GridBagLayout">
                                 <constraints>
-                                  <card name="endend"/>
+                                  <card name="conclusion"/>
                                 </constraints>
                                 <properties/>
                                 <border type="none"/>
@@ -426,16 +407,17 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="8a1a" class="javax.swing.JButton" binding="backButton" default-binding="true">
+                      <component id="c99b2" class="javax.swing.JButton" binding="backButton">
                         <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
+                          <label value="back"/>
                           <text value="back"/>
                         </properties>
                       </component>
-                      <grid id="6d802" binding="handHistory" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+                      <grid id="4dd17" binding="handHistoryPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -446,6 +428,87 @@
                       </grid>
                     </children>
                   </grid>
+                  <grid id="cf282" binding="deposit" layout-manager="GridBagLayout">
+                    <constraints>
+                      <card name="deposit"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="194aa" class="javax.swing.JTextField" binding="depositInput">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="842bb" class="javax.swing.JButton" binding="depositButton1">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="deposit"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <grid id="b5025" binding="withdraw" layout-manager="GridBagLayout">
+                    <constraints>
+                      <card name="withdraw"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="ce24" class="javax.swing.JTextField" binding="withdrawInput">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="cfce1" class="javax.swing.JButton" binding="withdrawButton1" default-binding="true">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="withdraw"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <grid id="19489" binding="bet" layout-manager="GridBagLayout">
+                    <constraints>
+                      <card name="bet"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="d7d9a" class="javax.swing.JButton" binding="betButton" default-binding="true">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="bet"/>
+                        </properties>
+                      </component>
+                      <component id="f8913" class="javax.swing.JTextField" binding="betInput">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                    </children>
+                  </grid>
                 </children>
               </grid>
               <grid id="375f7" layout-manager="FlowLayout" hgap="10" vgap="5" flow-align="0">
@@ -453,31 +516,19 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="10ee1" class="javax.swing.JLabel" binding="name">
+                  <component id="10ee1" class="javax.swing.JLabel" binding="nameLabel">
                     <constraints/>
                     <properties>
                       <text value="Label"/>
                     </properties>
                   </component>
-                  <component id="2e114" class="javax.swing.JLabel" binding="balance">
+                  <component id="2e114" class="javax.swing.JLabel" binding="balanceLabel">
                     <constraints/>
                     <properties>
                       <text value="Label"/>
                     </properties>
                   </component>
-                  <component id="8495c" class="javax.swing.JLabel" binding="initial">
-                    <constraints/>
-                    <properties>
-                      <text value="Label"/>
-                    </properties>
-                  </component>
-                  <component id="1d55d" class="javax.swing.JLabel" binding="goal">
-                    <constraints/>
-                    <properties>
-                      <text value="Label"/>
-                    </properties>
-                  </component>
-                  <component id="9a923" class="javax.swing.JLabel" binding="bet">
+                  <component id="9a923" class="javax.swing.JLabel" binding="betLabel">
                     <constraints/>
                     <properties>
                       <text value="Label"/>

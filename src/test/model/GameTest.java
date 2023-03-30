@@ -8,15 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameTest {
     private static final String NAME = "";
     private static final int BALANCE = 10;
-    private static final int STARTING = 1;
-    private static final int GOAL = 100;
     private Game game;
     private Player player;
 
     @BeforeEach
     public void runBefore() {
         game = new Game();
-        player = new Player(NAME, BALANCE, STARTING, GOAL);
+        player = new Player(NAME, BALANCE);
     }
 
     @Test
@@ -66,20 +64,6 @@ public class GameTest {
         assertEquals(0, game.getPlayer().getHand().getCards().size());
         assertEquals(0, game.getDealer().getHand().getCards().size());
         assertEquals(0, game.getPlayer().getHand().getBet());
-    }
-
-    @Test
-    public void testGameEnd() {
-        game.setPlayer(player);
-        assertFalse(game.gameEnd());
-        game.getPlayer().subBalance(BALANCE);
-        assertTrue(game.gameEnd());
-        game.getPlayer().addBalance(GOAL - BALANCE - 1);
-        assertFalse(game.gameEnd());
-        game.getPlayer().addBalance(GOAL - BALANCE);
-        assertTrue(game.gameEnd());
-        game.getPlayer().addBalance(GOAL - BALANCE + 1);
-        assertTrue(game.gameEnd());
     }
 
     @Test

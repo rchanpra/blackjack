@@ -1,19 +1,17 @@
 {
-    "goal": 3,
-    "balance": 1,
-    "starting": 2,
-    "handHistory": [{
-        "bet": 0,
-        "cards": [
-            {
-                "rank": 1,
-                "suit": 1
-            },
-            {
-                "rank": 13,
-                "suit": 4
-            }
-        ]
-    }],
-    "name": "X"
+  "balance": 1,
+  "handHistory": [{
+    "bet": 0,
+    "cards": [
+      {
+        "rank": 1,
+        "suit": 1
+      },
+      {
+        "rank": 13,
+        "suit": 4
+      }
+    ]
+  }],
+  "name": "X"
 }

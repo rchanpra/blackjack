@@ -10,19 +10,15 @@ import java.util.List;
 public class Player extends Person {
     private String name;
     private int balance;
-    private int starting;
-    private int goal;
     private Hand altHand;
     private List<Hand> handHistory;
 
     // REQUIRES: starting > 0 and goal > initial
     // EFFECTS: initializes name, balance, starting, and goal with parameters, initializes hands empty
-    public Player(String name, int balance, int starting, int goal) {
+    public Player(String name, int balance) {
         super();
         this.name = name;
         this.balance = balance;
-        this.starting = starting;
-        this.goal = goal;
         handHistory = new ArrayList<>();
     }
 
@@ -34,16 +30,6 @@ public class Player extends Person {
     // EFFECTS: returns balance
     public int getBalance() {
         return balance;
-    }
-
-    // EFFECTS: returns starting
-    public int getStarting() {
-        return starting;
-    }
-
-    // EFFECTS: returns goal
-    public int getGoal() {
-        return goal;
     }
 
     // EFFECTS: returns altHand
@@ -84,12 +70,15 @@ public class Player extends Person {
 
 
     // MODIFIES: this
-    // EFFECTS: adds hand(s) to handHistory and reinitialize hand(s)
+    // EFFECTS: adds hand(s) to handHistory to max of 5 and reinitialize hand(s)
     @Override
     public void shuffle() {
         handHistory.add(hand);
         if (altHand != null) {
             handHistory.add(altHand);
+        }
+        while (handHistory.size() > 5) {
+            handHistory.remove(0);
         }
         hand = new Hand();
         altHand = null;
@@ -113,8 +102,6 @@ public class Player extends Person {
         JSONObject json = new JSONObject();
         json.put("name", name);
         json.put("balance", balance);
-        json.put("starting", starting);
-        json.put("goal", goal);
         json.put("handHistory", handHistoryToJson());
         return json;
     }

@@ -47,11 +47,6 @@ https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 - The PNG files of playing cards were taken from an open source archive, which is located at the following URL:
 https://code.google.com/archive/p/vector-playing-cards/.
 
-## Future Plans
-
-- Add multiple players
-- Add Baccarat and Pok Deng and potentially turn application into Playing Cards Simulator
-
 ## Instructions for Grader
 
 - You can generate the first required action related to adding Xs to a Y by...

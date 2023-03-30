@@ -66,11 +66,6 @@ public class Game {
         deck.shuffle();
     }
 
-    // EFFECTS: returns true if player is broke or reaches goal else false
-    public boolean gameEnd() {
-        return player.getBalance() <= 0 || player.getBalance() >= player.getGoal();
-    }
-
     // MODIFIES: this
     // EFFECTS: determines round outcome for player hand and proceeds with payouts
     public void payout(Hand hand) {

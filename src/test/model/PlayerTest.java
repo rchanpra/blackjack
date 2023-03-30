@@ -12,8 +12,8 @@ public class PlayerTest {
 
     @BeforeEach
     public void runBefore() {
-        player1 = new Player("a", 100, 10, 1000);
-        player2 = new Player("b", 1, 2, 3);
+        player1 = new Player("a", 100);
+        player2 = new Player("b", 1);
         hand = new Hand();
         hand.addCard(new Card(1, 1));
         hand.addCard(new Card(7, 3));
@@ -30,18 +30,6 @@ public class PlayerTest {
     public void testGetBalance() {
         assertEquals(100, player1.getBalance());
         assertEquals(1, player2.getBalance());
-    }
-
-    @Test
-    public void testGetStarting() {
-        assertEquals(10, player1.getStarting());
-        assertEquals(2, player2.getStarting());
-    }
-
-    @Test
-    public void testGetGoal() {
-        assertEquals(1000, player1.getGoal());
-        assertEquals(3, player2.getGoal());
     }
 
     @Test

@@ -1,5 +1,4 @@
 {
-    "goal": 3,
     "balance": 1,
     "handHistory": [{
         "bet": 0,
@@ -14,6 +13,5 @@
             }
         ]
     }],
-    "name": "X",
-    "starting": 2
+    "name": "X"
 }

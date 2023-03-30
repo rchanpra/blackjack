@@ -15,7 +15,7 @@ public class PersonTest {
 
     @BeforeEach
     public void runBefore() {
-        player = new Player("", 1, 2, 3);
+        player = new Player("", 1);
         dealer = new Dealer();
         hand = new Hand();
         card1 = new Card(1, 1);

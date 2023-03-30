@@ -1,7 +1,5 @@
 {
-    "goal": 3,
-    "balance": 1,
-    "starting": 2,
-    "handHistory": [],
-    "name": "X"
+  "balance": 1,
+  "handHistory": [],
+  "name": "X"
 }
