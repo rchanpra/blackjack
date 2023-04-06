@@ -1,6 +1,7 @@
 package ui;
 
 import model.*;
+import model.Event;
 
 import javax.swing.*;
 import java.awt.*;
@@ -171,12 +172,6 @@ public class BlackjackGUI extends JFrame {
                 blackjackCL.show(blackjack, "bet");
             }
         });
-        depositButton.addActionListener(e -> {
-            blackjackCL.show(blackjack, "deposit");
-        });
-        withdrawButton.addActionListener(e -> {
-            blackjackCL.show(blackjack, "withdraw");
-        });
         historyButton.addActionListener(e -> {
             blackjackCL.show(blackjack, "history");
             setHandHistoryPanel();
@@ -186,12 +181,21 @@ public class BlackjackGUI extends JFrame {
         });
         exitButton.addActionListener(e -> {
             dispose();
+            for (Event event : EventLog.getInstance()) {
+                System.out.println(event.getDescription());
+            }
         });
     }
 
     // MODIFIES: this
     // EFFECTS: adds ActionListener to buttons in submenu panels
     public void setSubMenuButtons() {
+        depositButton.addActionListener(e -> {
+            blackjackCL.show(blackjack, "deposit");
+        });
+        withdrawButton.addActionListener(e -> {
+            blackjackCL.show(blackjack, "withdraw");
+        });
         depositButton1.addActionListener(e -> {
             game.getPlayer().addBalance(Integer.parseInt(depositInput.getText()));
             depositInput.setText("");

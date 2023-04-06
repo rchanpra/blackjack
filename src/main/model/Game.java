@@ -52,12 +52,12 @@ public class Game {
     // MODIFIES: this
     // EFFECTS: collects cards and shuffles deck
     public void deal() {
-        // player.getHand().addCard(new Card(2, 1));
-        // player.getHand().addCard(new Card(2, 2));
         player.getHand().draw(deck);
         dealer.getHand().draw(deck);
         player.getHand().draw(deck);
         dealer.getHand().draw(deck);
+        EventLog.getInstance().logEvent(new Event("card added to hand"));
+        EventLog.getInstance().logEvent(new Event("card added to hand"));
     }
 
     // MODIFIES: this
@@ -66,6 +66,7 @@ public class Game {
         player.shuffle();
         dealer.shuffle();
         deck.shuffle();
+        EventLog.getInstance().logEvent(new Event("all cards removed from hand"));
     }
 
     // MODIFIES: this
@@ -94,22 +95,29 @@ public class Game {
 
     // MODIFIES: this
     // EFFECTS: runs first turn of player
+    @SuppressWarnings("methodlength")
     public void playerFirstTurn(String decision) {
         switch (decision) {
             case "h":
-                player.getHand().addCard(deck.deal());
+                player.getHand().draw(deck);
+                EventLog.getInstance().logEvent(new Event("card added to hand"));
                 break;
             case "s": break;
             case "d":
                 player.subBalance(player.getHand().getBet());
                 player.getHand().setBet(player.getHand().getBet() * 2);
-                player.getHand().addCard(deck.deal());
+                player.getHand().draw(deck);
+                EventLog.getInstance().logEvent(new Event("card added to hand"));
                 break;
             case "sp":
                 player.subBalance(player.getHand().getBet());
                 player.setAltHand(player.getHand().split());
-                player.getHand().addCard(deck.deal());
-                player.getAltHand().addCard(deck.deal());
+                EventLog.getInstance().logEvent(new Event("card removed from primary hand"));
+                EventLog.getInstance().logEvent(new Event("card added to secondary hand"));
+                player.getHand().draw(deck);
+                player.getAltHand().draw(deck);
+                EventLog.getInstance().logEvent(new Event("card added to primary hand"));
+                EventLog.getInstance().logEvent(new Event("card added to secondary hand"));
                 break;
             case "su":
                 player.addBalance((int) Math.floor((double) player.getHand().getBet() / 2));
@@ -123,13 +131,15 @@ public class Game {
     public void playerRestTurn(Hand hand, String decision) {
         switch (decision) {
             case "h":
-                hand.addCard(deck.deal());
+                hand.draw(deck);
+                EventLog.getInstance().logEvent(new Event("card added to hand"));
                 break;
             case "s": break;
             case "d":
                 player.subBalance(hand.getBet());
                 hand.setBet(hand.getBet() * 2);
-                hand.addCard(deck.deal());
+                hand.draw(deck);
+                EventLog.getInstance().logEvent(new Event("card added to hand"));
                 break;
         }
     }
