@@ -6,33 +6,41 @@ import org.junit.jupiter.api.Test;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the Event class
- */
 public class EventTest {
-	private Event e;
-	private Date d;
-	
-	//NOTE: these tests might fail if time at which line (2) below is executed
-	//is different from time that line (1) is executed.  Lines (1) and (2) must
-	//run in same millisecond for this test to make sense and pass.
-	
-	@BeforeEach
-	public void runBefore() {
-		e = new Event("Sensor open at door");   // (1)
-		d = Calendar.getInstance().getTime();   // (2)
-	}
-	
-	@Test
-	public void testEvent() {
-		assertEquals("Sensor open at door", e.getDescription());
-		assertEquals(d.toString(), e.getDate().toString());
-	}
+    private static final int HASH_CONSTANT = 13;
+    private Event event;
+    private Date date;
+    private String description;
 
-	@Test
-	public void testToString() {
-		assertEquals(d.toString() + "\n" + "Sensor open at door", e.toString());
-	}
+    @BeforeEach
+    public void runBefore() {
+        description = "Sensor open at door";
+        event = new Event(description);
+        date = Calendar.getInstance().getTime();
+    }
+
+    @Test
+    public void testEvent() {
+        assertEquals(description, event.getDescription());
+        assertEquals(date.toString(), event.getDate().toString());
+    }
+
+    @Test
+    public void testEqualsFalse() {
+        assertFalse(event.equals(null));
+        assertFalse(event.equals(date));
+        assertTrue(event.equals(event));
+    }
+
+    @Test
+    public void testHashCode() {
+        assertEquals(HASH_CONSTANT * date.hashCode() + description.hashCode(), event.hashCode());
+    }
+
+    @Test
+    public void testToString() {
+        assertEquals(date.toString() + "\n" + description, event.toString());
+    }
 }
