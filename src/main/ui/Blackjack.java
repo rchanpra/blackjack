@@ -1,29 +1,18 @@
 package ui;
 
 import model.*;
-import persistence.*;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 
 // Represents a game of blackjack
 public class Blackjack {
-    private static final String JSON_STORE = "./data/blackjack.json";
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
     private Scanner input;
-    private Deck deck;
-    private Dealer dealer;
-    private Player player;
+    private Game game;
 
     // EFFECTS: initializes all fields except player then run
     public Blackjack() {
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
         input = new Scanner(System.in);
-        deck = new Deck();
-        dealer = new Dealer();
+        game = new Game();
         run();
     }
 
@@ -33,29 +22,30 @@ public class Blackjack {
         start();
         boolean running = menu();
         while (running) {
-            player.getHand().setBet(askBet());
-            deal();
+            game.getPlayer().getHand().setBet(askBet());
+            game.deal();
             if (hasBlackjack()) {
-                payout(player.getHand());
+                game.payout(game.getPlayer().getHand());
             } else if (playerFirstTurn()) {
                 dealerTurn();
-                payout(player.getHand());
-                if (player.getAltHand() != null) {
-                    payout(player.getAltHand());
+                game.payout(game.getPlayer().getHand());
+                if (game.getPlayer().getAltHand() != null) {
+                    game.payout(game.getPlayer().getAltHand());
                 }
             }
-            shuffle();
+            game.shuffle();
             running = menu();
         }
     }
 
     // EFFECTS: returns true if there is a blackjack in the round else false
     private boolean hasBlackjack() {
-        if (player.getHand().hasBlackjack()) {
-            System.out.println("\n" + player.getName() + "'s Hand: " + player.getHand().getCardsString());
+        if (game.getPlayer().getHand().hasBlackjack()) {
+            System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand()
+                    .getCardsString());
             System.out.println("Blackjack!");
-            System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
-            if (dealer.getHand().hasBlackjack()) {
+            System.out.println("Dealer's Hand: " + game.getDealer().getInitialHandString());
+            if (game.getDealer().getHand().hasBlackjack()) {
                 System.out.println("Blackjack!");
             }
             return true;
@@ -87,10 +77,10 @@ public class Blackjack {
                     System.out.print(">>> ");
                     String name = input.next();
                     int balance = askInitial();
-                    player = new Player(name, balance);
+                    game.setPlayer(new Player(name, balance));
                     running = false;
                     break;
-                case "l": running = !loadPlayer();
+                case "l": running = !game.loadPlayer();
                     break;
                 default:
                     System.out.println("Invalid input.");
@@ -122,23 +112,6 @@ public class Blackjack {
         }
     }
 
-    // EFFECTS: asks for input for goal balance that > initial
-    private int askGoal(int initial) {
-        while (true) {
-            System.out.println("Input your goal balance: ");
-            try {
-                System.out.print(">>> ");
-                int amount = input.nextInt();
-                if (amount > initial) {
-                    return amount;
-                }
-            } catch (Exception e) {
-                input.nextLine();
-            }
-            System.out.println("Invalid input.");
-        }
-    }
-
     // EFFECTS: runs menu
     private boolean menu() {
         while (true) {
@@ -150,10 +123,10 @@ public class Blackjack {
             String selection = input.next().toLowerCase();
             switch (selection) {
                 case "p": return true;
-                case "h": System.out.println("Hand History: " + player.getHandHistoryString());
+                case "h": System.out.println("Hand History: " + game.getPlayer().getHandHistoryString());
                     enterToContinue();
                     break;
-                case "s": savePlayer();
+                case "s": game.savePlayer();
                     enterToContinue();
                     break;
                 case "q": return false;
@@ -164,9 +137,9 @@ public class Blackjack {
 
     // EFFECTS: returns true if balance is either <= 0 or > goal which automatically saves else false
     private boolean gameEnd() {
-        if (player.getBalance() <= 0) {
+        if (game.getPlayer().getBalance() <= 0) {
             System.out.println("Broke. Game Over!");
-            savePlayer();
+            game.savePlayer();
             return true;
         }
         return false;
@@ -174,7 +147,7 @@ public class Blackjack {
 
     // EFFECTS: print selections
     private void printSelection() {
-        System.out.println("\n" + player.getBalanceString());
+        System.out.println("\n" + game.getPlayer().getBalanceString());
         System.out.println("Select from:");
         System.out.println("\tp -> play");
         System.out.println("\th -> hand history");
@@ -185,12 +158,12 @@ public class Blackjack {
     // EFFECTS: asks for input for bet that >= player's balance
     private int askBet() {
         while (true) {
-            System.out.println("\n" + player.getBalanceString());
+            System.out.println("\n" + game.getPlayer().getBalanceString());
             System.out.println("Input bet: ");
             try {
                 System.out.print(">>> ");
                 int bet = input.nextInt();
-                if (bet <= player.getBalance()) {
+                if (bet <= game.getPlayer().getBalance()) {
                     return bet;
                 }
             } catch (Exception e) {
@@ -201,76 +174,37 @@ public class Blackjack {
     }
 
     // MODIFIES: this
-    // EFFECTS: resets deck and hands
-    private void shuffle() {
-        deck.shuffle();
-        dealer.shuffle();
-        player.shuffle();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: deals 2 cards to each hand
-    private void deal() {
-        dealer.getHand().addCard(deck.deal());
-        player.getHand().addCard(deck.deal());
-        dealer.getHand().addCard(deck.deal());
-        player.getHand().addCard(deck.deal());
-    }
-
-    // MODIFIES: this
     // EFFECTS: ends if dealer has blackjack else loop drawing cards until dealer's hand value is at least 17 or dealer
     // has 5-card Charlie
     private void dealerTurn() {
         enterToContinue();
-        System.out.println("\nDealer's Hand: " + dealer.getHand().getCardsString());
-        if (dealer.getHand().hasBlackjack()) {
+        System.out.println("\nDealer's Hand: " + game.getDealer().getHand().getCardsString());
+        if (game.getDealer().getHand().hasBlackjack()) {
             System.out.println("Blackjack!");
         } else {
-            while (dealer.canDraw()) {
-                dealer.getHand().addCard(deck.deal());
-                System.out.println("Dealer's Hand: " + dealer.getHand().getCardsString());
-                if (dealer.getHand().has5CardCharlie() && !dealer.getHand().isBusted()) {
+            while (game.getDealer().canDraw()) {
+                game.getDealer().getHand().addCard(game.getDeck().deal());
+                System.out.println("Dealer's Hand: " + game.getDealer().getHand().getCardsString());
+                if (game.getDealer().getHand().has5CardCharlie() && !game.getDealer().getHand().isBusted()) {
                     System.out.println("5-card charlie!");
                     break;
                 }
             }
-            if (dealer.getHand().isBusted()) {
+            if (game.getDealer().getHand().isBusted()) {
                 System.out.println("Busted!");
             }
         }
         enterToContinue();
     }
 
-    // MODIFIES: this
-    // EFFECTS: determines round outcome and proceeds with payouts for each hand
-    private void payout(Hand hand) {
-        if (hand.hasBlackjack() && !dealer.getHand().hasBlackjack()) {
-            player.addBalance(hand.getBet());
-        } else if (!hand.hasBlackjack() && dealer.getHand().hasBlackjack()) {
-            player.subBalance(hand.getBet());
-        } else if (hand.has5CardCharlie() && !dealer.getHand().has5CardCharlie()) {
-            player.addBalance(hand.getBet());
-        } else if (!hand.has5CardCharlie() && dealer.getHand().has5CardCharlie()) {
-            player.subBalance(hand.getBet());
-        } else {
-            if (!hand.isBusted() && (dealer.getHand().isBusted() || hand.getCardsValue() > dealer.getHand()
-                    .getCardsValue())) {
-                player.addBalance(hand.getBet());
-            } else if (!dealer.getHand().isBusted() && (hand.isBusted()) || hand.getCardsValue() > dealer.getHand()
-                    .getCardsValue()) {
-                player.subBalance(hand.getBet());
-            }
-        }
-    }
-
     // EFFECTS: returns true if player bust or has 5-card Charlie else false
     private boolean checkBustedOr5CardCharlie(Hand hand) {
         if (hand.isBusted()) {
-            System.out.println("\n" + player.getName() + "'s Hand: " + hand.getCardsString());
+            System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getCardsString());
             System.out.println("Busted!");
             return true;
         } else if (hand.has5CardCharlie()) {
-            System.out.println("\n" + player.getName() + "'s Hand: " + hand.getCardsString());
+            System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getCardsString());
             System.out.println("5-card charlie!");
             return true;
         } else {
@@ -283,9 +217,9 @@ public class Blackjack {
     private boolean playerFirstTurn() {
         String decision = askFirstDecision();
         switch (decision) {
-            case "h": player.getHand().addCard(deck.deal());
-                if (!checkBustedOr5CardCharlie(player.getHand())) {
-                    playerRestTurn(player.getHand());
+            case "h": game.getPlayer().getHand().addCard(game.getDeck().deal());
+                if (!checkBustedOr5CardCharlie(game.getPlayer().getHand())) {
+                    playerRestTurn(game.getPlayer().getHand());
                 }
                 return true;
             case "s": return true;
@@ -294,8 +228,8 @@ public class Blackjack {
             case "sp": runSplit();
                 return true;
             case "su":
-                player.getHand().setBet((int) Math.round((double) player.getHand().getBet() / 2));
-                player.subBalance(player.getHand().getBet());
+                game.getPlayer().getHand().setBet((int) Math.round((double) game.getPlayer().getHand().getBet() / 2));
+                game.getPlayer().subBalance(game.getPlayer().getHand().getBet());
             default: return false;
         }
     }
@@ -309,13 +243,13 @@ public class Blackjack {
             switch (decision) {
                 case "h": case "s": case "su": return decision;
                 case "d":
-                    if (player.getHand().getBet() * 2 <= player.getBalance()) {
+                    if (game.getPlayer().getHand().getBet() * 2 <= game.getPlayer().getBalance()) {
                         return decision;
                     }
                     break;
                 case "sp":
-                    if (player.getHand().canSplit()
-                            && player.getHand().getBet() * 2 <= player.getBalance()) {
+                    if (game.getPlayer().getHand().canSplit()
+                            && game.getPlayer().getHand().getBet() * 2 <= game.getPlayer().getBalance()) {
                         return decision;
                     }
                     break;
@@ -326,8 +260,9 @@ public class Blackjack {
 
     // EFFECTS: prints first decisions
     private void printFirstDecisions() {
-        System.out.println("\n" + player.getName() + "'s Hand: " + player.getHand().getCardsString());
-        System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
+        System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand()
+                .getCardsString());
+        System.out.println("Dealer's Hand: " + game.getDealer().getInitialHandString());
         System.out.println("Select decision from:");
         System.out.println("\th -> hit");
         System.out.println("\ts -> stand");
@@ -339,22 +274,22 @@ public class Blackjack {
     // MODIFIES: this
     // EFFECTS: runs double down as first decision
     private void runDoubleDown() {
-        player.getHand().setBet(player.getHand().getBet() * 2);
-        player.getHand().addCard(deck.deal());
-        System.out.println(player.getName() + "'s Hand: " + player.getHand().getCardsString());
-        checkBustedOr5CardCharlie(player.getHand());
+        game.getPlayer().getHand().setBet(game.getPlayer().getHand().getBet() * 2);
+        game.getPlayer().getHand().addCard(game.getDeck().deal());
+        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand().getCardsString());
+        checkBustedOr5CardCharlie(game.getPlayer().getHand());
     }
 
     // MODIFIES: this
     // EFFECTS: runs split as first decision
     private void runSplit() {
-        player.setAltHand(player.getHand().split());
-        player.getHand().addCard(deck.deal());
-        player.getAltHand().addCard(deck.deal());
-        System.out.println(player.getName() + "'s Hand: " + player.getHand().getCardsString());
-        System.out.println(player.getName() + "'s Hand: " + player.getAltHand().getCardsString());
-        playerRestTurn(player.getHand());
-        playerRestTurn(player.getAltHand());
+        game.getPlayer().setAltHand(game.getPlayer().getHand().split());
+        game.getPlayer().getHand().addCard(game.getDeck().deal());
+        game.getPlayer().getAltHand().addCard(game.getDeck().deal());
+        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand().getCardsString());
+        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getAltHand().getCardsString());
+        playerRestTurn(game.getPlayer().getHand());
+        playerRestTurn(game.getPlayer().getAltHand());
     }
 
     // MODIFIES: this
@@ -364,13 +299,13 @@ public class Blackjack {
         while (running) {
             String decision = askRestDecision(hand);
             switch (decision) {
-                case "h": hand.addCard(deck.deal());
+                case "h": hand.addCard(game.getDeck().deal());
                     if (checkBustedOr5CardCharlie(hand)) {
                         running = false;
                     }
                     break;
                 case "d": hand.setBet(hand.getBet() * 2);
-                    hand.addCard(deck.deal());
+                    hand.addCard(game.getDeck().deal());
                     checkBustedOr5CardCharlie(hand);
                 case "s": running = false;
                     break;
@@ -387,7 +322,7 @@ public class Blackjack {
             switch (decision) {
                 case "h": case "s": return decision;
                 case "d":
-                    if (hand.getBet() * 2 <= player.getBalance()) {
+                    if (hand.getBet() * 2 <= game.getPlayer().getBalance()) {
                         return decision;
                     }
             }
@@ -397,8 +332,8 @@ public class Blackjack {
 
     // EFFECTS: prints rest decisions
     private void printRestDecisions(Hand hand) {
-        System.out.println("\n" + player.getName() + "'s Hand: " + hand.getCardsString());
-        System.out.println("Dealer's Hand: " + dealer.getInitialHandString());
+        System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getCardsString());
+        System.out.println("Dealer's Hand: " + game.getDealer().getInitialHandString());
         System.out.println("Select decision from:");
         System.out.println("\th -> hit");
         System.out.println("\ts -> stand");
@@ -410,36 +345,5 @@ public class Blackjack {
         System.out.print("Press <ENTER> to continue.");
         input.nextLine();
         input.nextLine();
-    }
-
-    // EFFECTS: runs "Press <ENTER> to continue." sequence but 2 input.nextLine();
-    private void enterToContinue2() {
-        enterToContinue();
-        input.nextLine();
-    }
-
-    // EFFECTS: saves player to file
-    private void savePlayer() {
-        try {
-            jsonWriter.open();
-            jsonWriter.write(player);
-            jsonWriter.close();
-            System.out.println("Saved " + player.getName() + " to " + JSON_STORE);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: return true if able to load player from file
-    private boolean loadPlayer() {
-        try {
-            player = jsonReader.read();
-            System.out.println("Loaded " + player.getName() + " from " + JSON_STORE);
-            return true;
-        } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
-            return false;
-        }
     }
 }
