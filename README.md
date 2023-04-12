@@ -71,6 +71,7 @@ round of blackjack.
 
 ## Phase 4: Task 2
 
+A representative sample of the events that occur when the program runs:
 >Wed Apr 12 03:24:16 PDT 2023  
 Card added to player's hand: 3D  
 Wed Apr 12 03:24:16 PDT 2023  
@@ -92,4 +93,14 @@ All cards removed from dealer's hand
 
 > If you had more time to work on the project, what substantive refactoring might you use to improve your design?
 
-...
+The refactoring I am imagining is in the GUI component where I might add classes that extend the `JPanel` which will 
+then be used as fields inside the `BlackjackGUI` class or inside each other. This would be great improvement as 
+currently, there are way too many fields inside the `BlackjackGUI` class, which makes it hideous and inefficient. 
+Many of the `JPanel` objects contain other `JPanel` objects inside them, especially those with card layouts. If I were 
+to put them inside each other, it would greatly reduce the number of fields in the `BlackjackGUI` class. Not only that, 
+but many `JPanel` objects also contain another objects like `JButton`, `JLabel`, and `JTextField` which can be moved 
+inside those classes to also reduce the number of fields in the `BlackjackGUI` class.
+
+However, since I am utilizing the Swing UI Designer or GUI Form, this is impossible to do unless I use GUI Form as a
+tradeoff, which is not a bad tradeoff, but would make it more complicated when adding new `JPanel` objects, and I would
+have add a lot more code to improve the looks of the GUI console that would be lost along with GUI Form.
