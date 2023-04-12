@@ -182,7 +182,7 @@ public class BlackjackGUI extends JFrame {
         exitButton.addActionListener(e -> {
             dispose();
             for (Event event : EventLog.getInstance()) {
-                System.out.println(event.getDescription());
+                System.out.println(event.toString());
             }
         });
     }
@@ -251,7 +251,7 @@ public class BlackjackGUI extends JFrame {
         });
         nextButton1.addActionListener(e -> {
             if (game.getDealer().canDraw()) {
-                game.getDealer().getHand().draw(game.getDeck());
+                game.getDealer().draw(game.getDeck());
                 addDealerHand();
             } else {
                 game.payout(game.getPlayer().getHand());
@@ -316,7 +316,7 @@ public class BlackjackGUI extends JFrame {
     // EFFECTS: adds ActionListener to buttons in rest panel
     public void setRestButtons() {
         hitButton1.addActionListener(e -> {
-            game.playerRestTurn(game.getPlayer().getHand(), "h");
+            game.playerRestTurn("h");
             if (game.getPlayer().getHand().canDraw()) {
                 decisionCL.show(decision, "rest");
             } else {
@@ -325,12 +325,12 @@ public class BlackjackGUI extends JFrame {
             addPlayerHand();
         });
         standButton1.addActionListener(e -> {
-            game.playerRestTurn(game.getPlayer().getHand(), "s");
+            game.playerRestTurn("s");
             decisionCL.show(decision, "end");
         });
         doubleDownButton1.addActionListener(e -> {
             if (game.getPlayer().getHand().getBet() * 2 <= game.getPlayer().getBalance()) {
-                game.playerRestTurn(game.getPlayer().getHand(), "d");
+                game.playerRestTurn("d");
                 addPlayerHand();
                 decisionCL.show(decision, "end");
                 updateStatus();
@@ -342,7 +342,7 @@ public class BlackjackGUI extends JFrame {
     // EFFECTS: adds ActionListener to buttons in split panel
     public void setSplitButtons() {
         hitButton2.addActionListener(e -> {
-            game.playerRestTurn(game.getPlayer().getAltHand(), "h");
+            game.playerRestTurnAlt("h");
             if (game.getPlayer().getAltHand().canDraw()) {
                 decisionCL.show(decision, "split");
             } else {
@@ -351,11 +351,11 @@ public class BlackjackGUI extends JFrame {
             addPlayerHand();
         });
         standButton2.addActionListener(e -> {
-            game.playerRestTurn(game.getPlayer().getAltHand(), "s");
+            game.playerRestTurnAlt("s");
             decisionCL.show(decision, "end");
         });
         doubleDownButton2.addActionListener(e -> {
-            game.playerRestTurn(game.getPlayer().getAltHand(), "d");
+            game.playerRestTurnAlt("d");
             addPlayerHand();
             decisionCL.show(decision, "end");
             updateStatus();
@@ -376,7 +376,7 @@ public class BlackjackGUI extends JFrame {
         handPanel.setOpaque(false);
         JLabel valueLabel = new JLabel();
         valueLabel.setForeground(new Color(0xFFFFFF));
-        valueLabel.setText(Integer.toString(hand.getCardsValue()));
+        valueLabel.setText(hand.getValueString());
         JPanel valuePanel = new JPanel();
         valuePanel.setOpaque(false);
         valuePanel.add(valueLabel);
@@ -459,7 +459,7 @@ public class BlackjackGUI extends JFrame {
         handPanel.setOpaque(false);
         JLabel valueLabel = new JLabel();
         valueLabel.setForeground(new Color(0xFFFFFF));
-        valueLabel.setText("Bet: " + hand.getBet() + " | Value: " + hand.getCardsValue());
+        valueLabel.setText("Bet: " + hand.getBet() + " | Value: " + hand.getValue());
         JPanel valuePanel = new JPanel();
         valuePanel.setOpaque(false);
         valuePanel.add(valueLabel);

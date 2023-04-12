@@ -32,8 +32,8 @@ public class Hand {
         this.bet = bet;
     }
 
-    // EFFECTS: returns cards value
-    public int getCardsValue() {
+    // EFFECTS: returns hand value
+    public int getValue() {
         int value = 0;
         for (Card card : cards) {
             value += card.getValue();
@@ -44,21 +44,27 @@ public class Hand {
         return value;
     }
 
+    // EFFECTS: returns hand value as appropriate string
+    public String getValueString() {
+        String result = "";
+        int value = 0;
+        for (Card card : cards) {
+            value += card.getValue();
+        }
+        result += value;
+        if (hasAce() && value <= 11) {
+            result += "/" + getValue();
+        }
+        return result;
+    }
+
     // EFFECTS: returns hand as appropriate string
     public String getString() {
         String result = "";
         for (Card card : cards) {
             result += card.getString() + " ";
         }
-        int value = 0;
-        for (Card card : cards) {
-            value += card.getValue();
-        }
-        result += "(" + value;
-        if (hasAce() && value <= 11) {
-            result += "/" + getCardsValue();
-        }
-        return result + ")";
+        return result + "(" + getValueString() + ")";
     }
 
     // MODIFIES: this
@@ -67,24 +73,21 @@ public class Hand {
         cards.add(card);
     }
 
-    // MODIFIES: this, deck
-    // EFFECTS: adds cards dealt from deck to cards
-    public void draw(Deck deck) {
-        cards.add(deck.deal());
-    }
-
     // MODIFIES: this
     // EFFECTS: returns new hand split from this hand
     public Hand split() {
         Hand hand = new Hand();
-        hand.addCard(cards.remove(1));
+        Card card = cards.remove(1);
+        EventLog.getInstance().logEvent(new Event("Card removed from player's hand: " + card.getString()));
+        hand.addCard(card);
+        EventLog.getInstance().logEvent(new Event("Card added to player's second hand: " + card.getString()));
         hand.setBet(bet);
         return hand;
     }
 
     // EFFECTS: returns true if cards value is greater than 21 else false
     public boolean isBusted() {
-        return getCardsValue() > 21;
+        return getValue() > 21;
     }
 
     // EFFECTS: returns true if cards have an ace else false
@@ -99,7 +102,7 @@ public class Hand {
 
     // EFFECTS: returns true if cards have 2 cards and a value of 21 else false
     public boolean hasBlackjack() {
-        return cards.size() == 2 && getCardsValue() == 21;
+        return cards.size() == 2 && getValue() == 21;
     }
 
     // EFFECTS: returns true if cards have 5 cards and not busted else false

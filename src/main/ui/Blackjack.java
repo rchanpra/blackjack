@@ -4,7 +4,7 @@ import model.*;
 
 import java.util.Scanner;
 
-// Represents a game of blackjack
+// Represents a console UI for a game of blackjack
 public class Blackjack {
     private Scanner input;
     private Game game;

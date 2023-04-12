@@ -21,7 +21,7 @@ public class Dealer extends Person {
     // EFFECTS: returns true if dealer should draw else false
     public boolean canDraw() {
         if (hand.canDraw()) {
-            return hand.getCardsValue() < 17;
+            return hand.getValue() < 17;
         }
         return false;
     }
@@ -31,5 +31,15 @@ public class Dealer extends Person {
     @Override
     public void shuffle() {
         hand = new Hand();
+        EventLog.getInstance().logEvent(new Event("All cards removed from dealer's hand"));
+    }
+
+    // MODIFIES: super, deck
+    // EFFECTS: draw a card from deck and add it to hand
+    @Override
+    public void draw(Deck deck) {
+        Card card = deck.deal();
+        hand.addCard(card);
+        EventLog.getInstance().logEvent(new Event("Card added to dealer's hand: " + card.getString()));
     }
 }

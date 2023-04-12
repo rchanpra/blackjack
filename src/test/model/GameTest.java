@@ -264,32 +264,65 @@ public class GameTest {
         game.setPlayer(player);
         game.shuffle();
         game.deal();
-        game.getPlayer().getHand().draw(game.getDeck());
+        game.playerFirstTurn("h");
         game.getPlayer().getHand().setBet(1);
-        game.playerRestTurn(game.getPlayer().getHand(), "");
+        game.playerRestTurn("");
         assertEquals(3, game.getPlayer().getHand().getCards().size());
         assertEquals(1, game.getPlayer().getHand().getBet());
         game.shuffle();
         game.deal();
-        game.getPlayer().getHand().draw(game.getDeck());
+        game.playerFirstTurn("h");
         game.getPlayer().getHand().setBet(1);
-        game.playerRestTurn(game.getPlayer().getHand(), "h");
+        game.playerRestTurn("h");
         assertEquals(4, game.getPlayer().getHand().getCards().size());
         assertEquals(1, game.getPlayer().getHand().getBet());
         game.shuffle();
         game.deal();
-        game.getPlayer().getHand().draw(game.getDeck());
+        game.playerFirstTurn("h");
         game.getPlayer().getHand().setBet(1);
-        game.playerRestTurn(game.getPlayer().getHand(), "s");
+        game.playerRestTurn("s");
         assertEquals(3, game.getPlayer().getHand().getCards().size());
         assertEquals(1, game.getPlayer().getHand().getBet());
         game.shuffle();
         game.deal();
-        game.getPlayer().getHand().draw(game.getDeck());
+        game.playerFirstTurn("h");
         game.getPlayer().getHand().setBet(1);
-        game.playerRestTurn(game.getPlayer().getHand(), "d");
+        game.playerRestTurn("d");
         assertEquals(4, game.getPlayer().getHand().getCards().size());
         assertEquals(2, game.getPlayer().getHand().getBet());
+    }
+
+    @Test
+    public void testPlayerRestTurnAlt() {
+        game.setPlayer(player);
+        game.shuffle();
+        game.deal();
+        game.playerFirstTurn("sp");
+        game.getPlayer().getAltHand().setBet(1);
+        game.playerRestTurnAlt("");
+        assertEquals(2, game.getPlayer().getAltHand().getCards().size());
+        assertEquals(1, game.getPlayer().getAltHand().getBet());
+        game.shuffle();
+        game.deal();
+        game.playerFirstTurn("sp");
+        game.getPlayer().getAltHand().setBet(1);
+        game.playerRestTurnAlt("h");
+        assertEquals(3, game.getPlayer().getAltHand().getCards().size());
+        assertEquals(1, game.getPlayer().getAltHand().getBet());
+        game.shuffle();
+        game.deal();
+        game.playerFirstTurn("sp");
+        game.getPlayer().getAltHand().setBet(1);
+        game.playerRestTurnAlt("s");
+        assertEquals(2, game.getPlayer().getAltHand().getCards().size());
+        assertEquals(1, game.getPlayer().getAltHand().getBet());
+        game.shuffle();
+        game.deal();
+        game.playerFirstTurn("sp");
+        game.getPlayer().getAltHand().setBet(1);
+        game.playerRestTurnAlt("d");
+        assertEquals(3, game.getPlayer().getAltHand().getCards().size());
+        assertEquals(2, game.getPlayer().getAltHand().getBet());
     }
 
     @Test

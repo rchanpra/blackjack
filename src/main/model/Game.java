@@ -52,12 +52,10 @@ public class Game {
     // MODIFIES: this
     // EFFECTS: collects cards and shuffles deck
     public void deal() {
-        player.getHand().draw(deck);
-        dealer.getHand().draw(deck);
-        player.getHand().draw(deck);
-        dealer.getHand().draw(deck);
-        EventLog.getInstance().logEvent(new Event("card added to hand"));
-        EventLog.getInstance().logEvent(new Event("card added to hand"));
+        player.draw(deck);
+        dealer.draw(deck);
+        player.draw(deck);
+        dealer.draw(deck);
     }
 
     // MODIFIES: this
@@ -66,7 +64,6 @@ public class Game {
         player.shuffle();
         dealer.shuffle();
         deck.shuffle();
-        EventLog.getInstance().logEvent(new Event("all cards removed from hand"));
     }
 
     // MODIFIES: this
@@ -85,39 +82,32 @@ public class Game {
                 player.addBalance(hand.getBet() * 2);
             }
         } else if (!hand.isBusted()
-                && (dealer.getHand().isBusted() || hand.getCardsValue() > dealer.getHand().getCardsValue())) {
+                && (dealer.getHand().isBusted() || hand.getValue() > dealer.getHand().getValue())) {
             player.addBalance(hand.getBet() * 2);
         } else if ((hand.isBusted() && dealer.getHand().isBusted())
-                || hand.getCardsValue() == dealer.getHand().getCardsValue()) {
+                || hand.getValue() == dealer.getHand().getValue()) {
             player.addBalance(hand.getBet());
         }
     }
 
     // MODIFIES: this
     // EFFECTS: runs first turn of player
-    @SuppressWarnings("methodlength")
     public void playerFirstTurn(String decision) {
         switch (decision) {
             case "h":
-                player.getHand().draw(deck);
-                EventLog.getInstance().logEvent(new Event("card added to hand"));
+                player.draw(deck);
                 break;
             case "s": break;
             case "d":
                 player.subBalance(player.getHand().getBet());
                 player.getHand().setBet(player.getHand().getBet() * 2);
-                player.getHand().draw(deck);
-                EventLog.getInstance().logEvent(new Event("card added to hand"));
+                player.draw(deck);
                 break;
             case "sp":
                 player.subBalance(player.getHand().getBet());
                 player.setAltHand(player.getHand().split());
-                EventLog.getInstance().logEvent(new Event("card removed from primary hand"));
-                EventLog.getInstance().logEvent(new Event("card added to secondary hand"));
-                player.getHand().draw(deck);
-                player.getAltHand().draw(deck);
-                EventLog.getInstance().logEvent(new Event("card added to primary hand"));
-                EventLog.getInstance().logEvent(new Event("card added to secondary hand"));
+                player.draw(deck);
+                player.drawAlt(deck);
                 break;
             case "su":
                 player.addBalance((int) Math.floor((double) player.getHand().getBet() / 2));
@@ -128,18 +118,32 @@ public class Game {
 
     // MODIFIES: this
     // EFFECTS: runs rest turn of player hand
-    public void playerRestTurn(Hand hand, String decision) {
+    public void playerRestTurn(String decision) {
         switch (decision) {
             case "h":
-                hand.draw(deck);
-                EventLog.getInstance().logEvent(new Event("card added to hand"));
+                player.draw(deck);
                 break;
             case "s": break;
             case "d":
-                player.subBalance(hand.getBet());
-                hand.setBet(hand.getBet() * 2);
-                hand.draw(deck);
-                EventLog.getInstance().logEvent(new Event("card added to hand"));
+                player.subBalance(player.getHand().getBet());
+                player.getHand().setBet(player.getHand().getBet() * 2);
+                player.draw(deck);
+                break;
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: runs rest turn of player altHand
+    public void playerRestTurnAlt(String decision) {
+        switch (decision) {
+            case "h":
+                player.drawAlt(deck);
+                break;
+            case "s": break;
+            case "d":
+                player.subBalance(player.getAltHand().getBet());
+                player.getAltHand().setBet(player.getAltHand().getBet() * 2);
+                player.drawAlt(deck);
                 break;
         }
     }

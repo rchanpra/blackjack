@@ -14,7 +14,6 @@ public class HandTest {
     private Card card5;
     private Card card6;
     private Card card7;
-    private Deck deck;
 
     @BeforeEach
     public void runBefore() {
@@ -26,7 +25,6 @@ public class HandTest {
         card5 = new Card(1, 3);
         card6 = new Card(11, 3);
         card7 = new Card(4, 2);
-        deck = new Deck();
     }
 
     @Test
@@ -51,11 +49,21 @@ public class HandTest {
     }
 
     @Test
-    public void testGetCardsValue() {
-        assertEquals(0, hand.getCardsValue());
+    public void testGetValue() {
+        assertEquals(0, hand.getValue());
         hand.addCard(card1);
         hand.addCard(card2);
-        assertEquals(18, hand.getCardsValue());
+        assertEquals(18, hand.getValue());
+    }
+
+    @Test
+    public void testGetValueString() {
+        assertEquals("0", hand.getValueString());
+        hand.addCard(card1);
+        hand.addCard(card2);
+        assertEquals("8/18", hand.getValueString());
+        hand.addCard(card3);
+        assertEquals("18", hand.getValueString());
     }
 
     @Test
@@ -76,15 +84,6 @@ public class HandTest {
         assertEquals(card1, hand.getCards().get(0));
         assertEquals(card2, hand.getCards().get(1));
         assertEquals(card3, hand.getCards().get(2));
-    }
-
-    @Test
-    public void testDraw() {
-        assertEquals(0, hand.getCards().size());
-        assertEquals(52, deck.getCards().size());
-        hand.draw(deck);
-        assertEquals(1, hand.getCards().size());
-        assertEquals(51, deck.getCards().size());
     }
 
     @Test

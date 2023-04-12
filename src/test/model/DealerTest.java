@@ -8,10 +8,12 @@ import static org.junit.jupiter.api.Assertions.*;
 // Unit tests for the Dealer class
 public class DealerTest {
     private Dealer dealer;
+    private Deck deck;
 
     @BeforeEach
     public void runBefore() {
         dealer = new Dealer();
+        deck = new Deck();
     }
 
     @Test
@@ -57,5 +59,14 @@ public class DealerTest {
         dealer.getHand().addCard(new Card(1, 1));
         dealer.shuffle();
         assertEquals(0, dealer.getHand().getCards().size());
+    }
+
+    @Test
+    public void testDraw() {
+        assertEquals(0, dealer.getHand().getCards().size());
+        assertEquals(52, deck.getCards().size());
+        dealer.draw(deck);
+        assertEquals(1, dealer.getHand().getCards().size());
+        assertEquals(51, deck.getCards().size());
     }
 }

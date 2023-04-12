@@ -9,6 +9,7 @@ public class PlayerTest {
     private Player player1;
     private Player player2;
     private Hand hand;
+    private Deck deck;
 
     @BeforeEach
     public void runBefore() {
@@ -18,6 +19,7 @@ public class PlayerTest {
         hand.addCard(new Card(1, 1));
         hand.addCard(new Card(7, 3));
         hand.addCard(new Card(13, 4));
+        deck = new Deck();
     }
 
     @Test
@@ -103,6 +105,25 @@ public class PlayerTest {
         assertEquals(2, player1.getHandHistory().size());
         assertEquals(hand, player1.getHandHistory().get(0));
         assertEquals(hand, player1.getHandHistory().get(1));
+    }
+
+    @Test
+    public void testDraw() {
+        assertEquals(0, player1.getHand().getCards().size());
+        assertEquals(52, deck.getCards().size());
+        player1.draw(deck);
+        assertEquals(1, player1.getHand().getCards().size());
+        assertEquals(51, deck.getCards().size());
+    }
+
+    @Test
+    public void testDrawAlt() {
+        player1.setAltHand(new Hand());
+        assertEquals(0, player1.getAltHand().getCards().size());
+        assertEquals(52, deck.getCards().size());
+        player1.drawAlt(deck);
+        assertEquals(1, player1.getAltHand().getCards().size());
+        assertEquals(51, deck.getCards().size());
     }
 
     @Test

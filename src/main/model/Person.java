@@ -21,4 +21,6 @@ public abstract class Person {
     }
 
     public abstract void shuffle();
+
+    public abstract void draw(Deck deck);
 }

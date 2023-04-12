@@ -74,14 +74,33 @@ public class Player extends Person {
     @Override
     public void shuffle() {
         handHistory.add(hand);
+        EventLog.getInstance().logEvent(new Event("All cards removed from player's hand"));
         if (altHand != null) {
             handHistory.add(altHand);
+            EventLog.getInstance().logEvent(new Event("All cards removed from player's second hand"));
         }
         while (handHistory.size() > 5) {
             handHistory.remove(0);
         }
         hand = new Hand();
         altHand = null;
+    }
+
+    // MODIFIES: super, deck
+    // EFFECTS: draw a card from deck and add it to hand
+    @Override
+    public void draw(Deck deck) {
+        Card card = deck.deal();
+        hand.addCard(card);
+        EventLog.getInstance().logEvent(new Event("Card added to player's hand: " + card.getString()));
+    }
+
+    // MODIFIES: this, deck
+    // EFFECTS: draw a card from deck and add it to altHand
+    public void drawAlt(Deck deck) {
+        Card card = deck.deal();
+        altHand.addCard(card);
+        EventLog.getInstance().logEvent(new Event("Card added to player's second hand: " + card.getString()));
     }
 
     // MODIFIES: this

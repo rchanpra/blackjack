@@ -68,3 +68,28 @@ https://code.google.com/archive/p/vector-playing-cards/.
 the data folder.
 - Additionally, when you clicked the play button, 52 cards are added to a new deck that will be used to play the new 
 round of blackjack.
+
+## Phase 4: Task 2
+
+>Wed Apr 12 03:24:16 PDT 2023  
+Card added to player's hand: 3D  
+Wed Apr 12 03:24:16 PDT 2023  
+Card added to dealer's hand: 7S  
+Wed Apr 12 03:24:16 PDT 2023  
+Card added to player's hand: JS  
+Wed Apr 12 03:24:16 PDT 2023  
+Card added to dealer's hand: 8S  
+Wed Apr 12 03:24:17 PDT 2023  
+Card added to player's hand: 8H  
+Wed Apr 12 03:24:19 PDT 2023  
+Card added to dealer's hand: 7H  
+Wed Apr 12 03:24:20 PDT 2023  
+All cards removed from player's hand  
+Wed Apr 12 03:24:20 PDT 2023  
+All cards removed from dealer's hand  
+
+## Phase 4: Task 3
+
+> If you had more time to work on the project, what substantive refactoring might you use to improve your design?
+
+...
