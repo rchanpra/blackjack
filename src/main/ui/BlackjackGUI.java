@@ -5,11 +5,12 @@ import model.Event;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
 // Represents a GUI for a game of blackjack
-public class BlackjackGUI extends JFrame {
+public class BlackjackGUI extends JFrame implements WindowListener {
     private Game game;
     private JPanel pane;
     private JPanel start;
@@ -80,7 +81,8 @@ public class BlackjackGUI extends JFrame {
     public BlackjackGUI() {
         game = new Game();
         setTitle("Blackjack");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        addWindowListener(this);
         setResizable(true);
         setSize(800, 600);
         getContentPane().setBackground(new Color(0x013220));
@@ -181,9 +183,6 @@ public class BlackjackGUI extends JFrame {
         });
         exitButton.addActionListener(e -> {
             dispose();
-            for (Event event : EventLog.getInstance()) {
-                System.out.println(event.toString());
-            }
         });
     }
 
@@ -480,5 +479,42 @@ public class BlackjackGUI extends JFrame {
             cardsPanel.add(l);
         }
         return cardsPanel;
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString());
+        }
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }
