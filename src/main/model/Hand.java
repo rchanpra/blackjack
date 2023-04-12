@@ -44,11 +44,11 @@ public class Hand {
         return value;
     }
 
-    // EFFECTS: returns cards as appropriate string
-    public String getCardsString() {
+    // EFFECTS: returns hand as appropriate string
+    public String getString() {
         String result = "";
         for (Card card : cards) {
-            result += card.getCard() + " ";
+            result += card.getString() + " ";
         }
         int value = 0;
         for (Card card : cards) {

@@ -32,10 +32,10 @@ public class CardTest {
     }
 
     @Test
-    public void testGetCard() {
-        assertEquals("AC", card1.getCard());
-        assertEquals("7H", card2.getCard());
-        assertEquals("KS", card3.getCard());
+    public void testGetString() {
+        assertEquals("AC", card1.getString());
+        assertEquals("7H", card2.getString());
+        assertEquals("KS", card3.getString());
     }
 
     @Test

@@ -11,7 +11,7 @@ public class Dealer extends Person {
     // REQUIRES: hand.size() == 2
     // EFFECTS: returns dealer's initial hand as appropriate string
     public String getInitialHandString() {
-        String result = "XX " + hand.getCards().get(0).getCard() + " (";
+        String result = "XX " + hand.getCards().get(0).getString() + " (";
         if (hand.getCards().get(0).getValue() == 1) {
             return result + "1/11+)";
         }

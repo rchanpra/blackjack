@@ -42,7 +42,7 @@ public class Blackjack {
     private boolean hasBlackjack() {
         if (game.getPlayer().getHand().hasBlackjack()) {
             System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand()
-                    .getCardsString());
+                    .getString());
             System.out.println("Blackjack!");
             System.out.println("Dealer's Hand: " + game.getDealer().getInitialHandString());
             if (game.getDealer().getHand().hasBlackjack()) {
@@ -178,13 +178,13 @@ public class Blackjack {
     // has 5-card Charlie
     private void dealerTurn() {
         enterToContinue();
-        System.out.println("\nDealer's Hand: " + game.getDealer().getHand().getCardsString());
+        System.out.println("\nDealer's Hand: " + game.getDealer().getHand().getString());
         if (game.getDealer().getHand().hasBlackjack()) {
             System.out.println("Blackjack!");
         } else {
             while (game.getDealer().canDraw()) {
                 game.getDealer().getHand().addCard(game.getDeck().deal());
-                System.out.println("Dealer's Hand: " + game.getDealer().getHand().getCardsString());
+                System.out.println("Dealer's Hand: " + game.getDealer().getHand().getString());
                 if (game.getDealer().getHand().has5CardCharlie() && !game.getDealer().getHand().isBusted()) {
                     System.out.println("5-card charlie!");
                     break;
@@ -200,11 +200,11 @@ public class Blackjack {
     // EFFECTS: returns true if player bust or has 5-card Charlie else false
     private boolean checkBustedOr5CardCharlie(Hand hand) {
         if (hand.isBusted()) {
-            System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getCardsString());
+            System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getString());
             System.out.println("Busted!");
             return true;
         } else if (hand.has5CardCharlie()) {
-            System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getCardsString());
+            System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getString());
             System.out.println("5-card charlie!");
             return true;
         } else {
@@ -261,7 +261,7 @@ public class Blackjack {
     // EFFECTS: prints first decisions
     private void printFirstDecisions() {
         System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand()
-                .getCardsString());
+                .getString());
         System.out.println("Dealer's Hand: " + game.getDealer().getInitialHandString());
         System.out.println("Select decision from:");
         System.out.println("\th -> hit");
@@ -276,7 +276,7 @@ public class Blackjack {
     private void runDoubleDown() {
         game.getPlayer().getHand().setBet(game.getPlayer().getHand().getBet() * 2);
         game.getPlayer().getHand().addCard(game.getDeck().deal());
-        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand().getCardsString());
+        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand().getString());
         checkBustedOr5CardCharlie(game.getPlayer().getHand());
     }
 
@@ -286,8 +286,8 @@ public class Blackjack {
         game.getPlayer().setAltHand(game.getPlayer().getHand().split());
         game.getPlayer().getHand().addCard(game.getDeck().deal());
         game.getPlayer().getAltHand().addCard(game.getDeck().deal());
-        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand().getCardsString());
-        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getAltHand().getCardsString());
+        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getHand().getString());
+        System.out.println(game.getPlayer().getName() + "'s Hand: " + game.getPlayer().getAltHand().getString());
         playerRestTurn(game.getPlayer().getHand());
         playerRestTurn(game.getPlayer().getAltHand());
     }
@@ -332,7 +332,7 @@ public class Blackjack {
 
     // EFFECTS: prints rest decisions
     private void printRestDecisions(Hand hand) {
-        System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getCardsString());
+        System.out.println("\n" + game.getPlayer().getName() + "'s Hand: " + hand.getString());
         System.out.println("Dealer's Hand: " + game.getDealer().getInitialHandString());
         System.out.println("Select decision from:");
         System.out.println("\th -> hit");

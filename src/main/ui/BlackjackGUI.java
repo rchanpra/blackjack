@@ -401,7 +401,7 @@ public class BlackjackGUI extends JFrame {
 
     // EFFECTS: returns cardLabel created from card
     public JLabel getCardLabel(Card card, int width, int height) {
-        ImageIcon icon = new ImageIcon("./data/cards/" + card.getCard() + ".png");
+        ImageIcon icon = new ImageIcon("./data/cards/" + card.getString() + ".png");
         JLabel cardLabel = new JLabel();
         cardLabel.setIcon(new ImageIcon(icon.getImage()
                 .getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH)));

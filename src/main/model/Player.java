@@ -51,7 +51,7 @@ public class Player extends Person {
     public String getHandHistoryString() {
         String handsString = "";
         for (Hand hand : handHistory) {
-            handsString += hand.getCardsString() + " [" + hand.getBet() + "], ";
+            handsString += hand.getString() + " [" + hand.getBet() + "], ";
         }
         return handsString;
     }

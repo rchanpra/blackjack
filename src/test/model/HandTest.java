@@ -59,13 +59,13 @@ public class HandTest {
     }
 
     @Test
-    public void testGetCardsString() {
-        assertEquals("(0)", hand.getCardsString());
+    public void testGetString() {
+        assertEquals("(0)", hand.getString());
         hand.addCard(card1);
         hand.addCard(card2);
-        assertEquals("AC 7H (8/18)", hand.getCardsString());
+        assertEquals("AC 7H (8/18)", hand.getString());
         hand.addCard(card3);
-        assertEquals("AC 7H KS (18)", hand.getCardsString());
+        assertEquals("AC 7H KS (18)", hand.getString());
     }
 
     @Test

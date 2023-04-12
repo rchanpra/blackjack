@@ -31,8 +31,8 @@ public class Card {
         return suit;
     }
 
-    // EFFECTS: returns rank and suit as string
-    public String getCard() {
+    // EFFECTS: returns card as appropriate string
+    public String getString() {
         return RANKS.get(rank - 1) + SUITS.get(suit - 1);
     }
 
