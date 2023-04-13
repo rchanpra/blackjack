@@ -114,4 +114,4 @@ organized. However, since I am utilizing the Swing UI Designer or GUI Form, this
 Form as a tradeoff. This is not necessarily a bad tradeoff, but it would make it more complicated when adding new 
 JPanel objects. It would also require a lot of work and time to make this happen as I would have to put a lot of effort 
 into keeping the current look of the GUI console the same even without GUI Form, which would require a lot of more 
-method calls. 
+method calls.
