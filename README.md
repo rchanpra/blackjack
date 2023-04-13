@@ -49,6 +49,8 @@ result, I am rather passionate about it. Therefore, this project could also be c
 https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 - The PNG files of playing cards were taken from an open source archive, which is located at the following URL:
 https://code.google.com/archive/p/vector-playing-cards/.
+- Event and EventLog along with their tests have been adapted from the CPSC210 team's work at the following URL:
+https://github.students.cs.ubc.ca/CPSC210/AlarmSystem
 
 ## Instructions for Grader
 
@@ -95,14 +97,21 @@ All cards removed from dealer's hand
 
 If I had more time to work on the project, I might improve my design by refactoring the GUI components to reduce the 
 number of fields inside the BlackjackGUI class. The refactoring I am imagining is making some of the current JPanel 
-fields inside the BlackjackGUI class into JPanel-extended classes. Any JPanel field with a card layout will be made 
+fields inside the BlackjackGUI class into JPanel-extended classes. Any JPanel field with CardLayout can be made 
 into its own class that contains JPanel fields that are part of its card set, which will help reduce the number of 
-fields inside the BlackjackGUI class. Also, most of the other significant JPanel fields with other layouts will also be 
+fields inside the BlackjackGUI class. Also, most of the other significant JPanel fields with other layouts can also be 
 made into its own class that contains JButton, JLabel, JTextField, or other JPanel fields. This will help reduce the 
 number of fields,  initialization, and addActionListener calls inside the BlackjackGUI class currently. Since the 
 BlackjackGUI class currently has over 500 lines, this will greatly help reduce the number of lines it has.
 
-However, since I am utilizing the Swing UI Designer or GUI Form, this is impossible to do unless I use GUI Form as a 
-tradeoff. This is not necessarily a bad tradeoff, but it would make it more complicated when adding new JPanel objects. 
-It would also require a lot of work and time to make this happen as I would have to put a lot of effort into keeping 
-the current look of the GUI console the same even without GUI Form, which would require a lot of more method calls.
+One example is that the field named `pane`, which is a JPanel object with CardLayout, can be made into its own class 
+named Pane that extends JPanel and has the following JPanel objects as fields: `start`, `create`, and `board`. Another 
+example is that the field named `create`, which is a JPanel object with GridBadLayout, can also be made into its own 
+class named Create that extends JPanel and has the following JTextField and JButton objects as fields: `nameInput`, 
+`balanceInput`, and `createButton`. The Create class can also include a call to addActionListener to add an action to 
+createButton. These two examples will help reduce the number of lines in the BlackjackGUI class and make it more 
+organized. However, since I am utilizing the Swing UI Designer or GUI Form, this is impossible to do unless I use GUI 
+Form as a tradeoff. This is not necessarily a bad tradeoff, but it would make it more complicated when adding new 
+JPanel objects. It would also require a lot of work and time to make this happen as I would have to put a lot of effort 
+into keeping the current look of the GUI console the same even without GUI Form, which would require a lot of more 
+method calls.
