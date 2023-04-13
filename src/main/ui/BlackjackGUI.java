@@ -105,11 +105,13 @@ public class BlackjackGUI extends JFrame implements WindowListener {
         setMenuButtons();
         setSubMenuButtons();
         setTransitionButtons();
+        setBackButtons();
         setNextButtons();
         setFirstButtons();
         setFirstButtons1();
         setRestButtons();
         setSplitButtons();
+        setStandButtons();
     }
 
     // MODIFIES: this
@@ -207,9 +209,6 @@ public class BlackjackGUI extends JFrame implements WindowListener {
             updateStatus();
             blackjackCL.show(blackjack, "menu");
         });
-        backButton.addActionListener(e -> {
-            blackjackCL.show(blackjack, "menu");
-        });
     }
 
     // MODIFIES: this
@@ -229,7 +228,21 @@ public class BlackjackGUI extends JFrame implements WindowListener {
                 updateStatus();
             }
         });
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds ActionListener to back buttons
+    public void setBackButtons() {
+        backButton.addActionListener(e -> {
+            blackjackCL.show(blackjack, "menu");
+        });
         backButton1.addActionListener(e -> {
+            game.payout(game.getPlayer().getHand());
+            if (game.getPlayer().getAltHand() != null) {
+                game.payout(game.getPlayer().getAltHand());
+            }
+            game.shuffle();
+            updateStatus();
             blackjackCL.show(blackjack, "menu");
             decisionCL.show(decision, "first");
             endCL.show(end, "reveal");
@@ -253,12 +266,6 @@ public class BlackjackGUI extends JFrame implements WindowListener {
                 game.getDealer().draw(game.getDeck());
                 addDealerHand();
             } else {
-                game.payout(game.getPlayer().getHand());
-                if (game.getPlayer().getAltHand() != null) {
-                    game.payout(game.getPlayer().getAltHand());
-                }
-                game.shuffle();
-                updateStatus();
                 endCL.show(end, "conclusion");
             }
         });
@@ -273,18 +280,20 @@ public class BlackjackGUI extends JFrame implements WindowListener {
                 decisionCL.show(decision, "rest");
             } else {
                 decisionCL.show(decision, "end");
+                if (game.getPlayer().getHand().isBusted()) {
+                    endCL.show(end, "conclusion");
+                }
             }
             addPlayerHand();
-        });
-        standButton.addActionListener(e -> {
-            game.playerFirstTurn("s");
-            decisionCL.show(decision, "end");
         });
         doubleDownButton.addActionListener(e -> {
             if (game.getPlayer().getHand().getBet() * 2 <= game.getPlayer().getBalance()) {
                 game.playerFirstTurn("d");
                 addPlayerHand();
                 decisionCL.show(decision, "end");
+                if (game.getPlayer().getHand().isBusted()) {
+                    endCL.show(end, "conclusion");
+                }
                 updateStatus();
             }
         });
@@ -320,18 +329,20 @@ public class BlackjackGUI extends JFrame implements WindowListener {
                 decisionCL.show(decision, "rest");
             } else {
                 decisionCL.show(decision, "end");
+                if (game.getPlayer().getHand().isBusted() && game.getPlayer().getAltHand() == null) {
+                    endCL.show(end, "conclusion");
+                }
             }
             addPlayerHand();
-        });
-        standButton1.addActionListener(e -> {
-            game.playerRestTurn("s");
-            decisionCL.show(decision, "end");
         });
         doubleDownButton1.addActionListener(e -> {
             if (game.getPlayer().getHand().getBet() * 2 <= game.getPlayer().getBalance()) {
                 game.playerRestTurn("d");
                 addPlayerHand();
                 decisionCL.show(decision, "end");
+                if (game.getPlayer().getHand().isBusted() && game.getPlayer().getAltHand() == null) {
+                    endCL.show(end, "conclusion");
+                }
                 updateStatus();
             }
         });
@@ -346,18 +357,37 @@ public class BlackjackGUI extends JFrame implements WindowListener {
                 decisionCL.show(decision, "split");
             } else {
                 decisionCL.show(decision, "end");
+                if (game.getPlayer().getHand().isBusted() && game.getPlayer().getAltHand().isBusted()) {
+                    endCL.show(end, "conclusion");
+                }
             }
             addPlayerHand();
-        });
-        standButton2.addActionListener(e -> {
-            game.playerRestTurnAlt("s");
-            decisionCL.show(decision, "end");
         });
         doubleDownButton2.addActionListener(e -> {
             game.playerRestTurnAlt("d");
             addPlayerHand();
             decisionCL.show(decision, "end");
+            if (game.getPlayer().getHand().isBusted() && game.getPlayer().getAltHand().isBusted()) {
+                endCL.show(end, "conclusion");
+            }
             updateStatus();
+        });
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds ActionListener to stand buttons
+    public void setStandButtons() {
+        standButton.addActionListener(e -> {
+            game.playerFirstTurn("s");
+            decisionCL.show(decision, "end");
+        });
+        standButton1.addActionListener(e -> {
+            game.playerRestTurn("s");
+            decisionCL.show(decision, "end");
+        });
+        standButton2.addActionListener(e -> {
+            game.playerRestTurnAlt("s");
+            decisionCL.show(decision, "end");
         });
     }
 

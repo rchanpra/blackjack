@@ -81,12 +81,16 @@ public class Game {
             } else {
                 player.addBalance(hand.getBet() * 2);
             }
-        } else if (!hand.isBusted()
-                && (dealer.getHand().isBusted() || hand.getValue() > dealer.getHand().getValue())) {
-            player.addBalance(hand.getBet() * 2);
-        } else if ((hand.isBusted() && dealer.getHand().isBusted())
-                || hand.getValue() == dealer.getHand().getValue()) {
-            player.addBalance(hand.getBet());
+        } else if (!hand.isBusted()) {
+            if (dealer.getHand().isBusted()) {
+                player.addBalance(hand.getBet() * 2);
+            } else {
+                if (hand.getValue() > dealer.getHand().getValue()) {
+                    player.addBalance(hand.getBet() * 2);
+                } else if (hand.getValue() == dealer.getHand().getValue()) {
+                    player.addBalance(hand.getBet());
+                }
+            }
         }
     }
 

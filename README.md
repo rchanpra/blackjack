@@ -92,6 +92,7 @@ All cards removed from dealer's hand
 ## Phase 4: Task 3
 
 **If you had more time to work on the project, what substantive refactoring might you use to improve your design?**
+
 If I had more time to work on the project, I might improve my design by refactoring the GUI components to reduce the 
 number of fields inside the BlackjackGUI class. The refactoring I am imagining is making some of the current JPanel 
 fields inside the BlackjackGUI class into JPanel-extended classes. Any JPanel field with a card layout will be made 

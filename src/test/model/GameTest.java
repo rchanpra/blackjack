@@ -151,7 +151,8 @@ public class GameTest {
         game.getPlayer().getHand().setBet(1);
         game.getPlayer().subBalance(1);
         game.payout(game.getPlayer().getHand());
-        assertEquals(BALANCE, game.getPlayer().getBalance());
+        assertEquals(BALANCE - 1, game.getPlayer().getBalance());
+        game.getPlayer().addBalance(1);
         game.shuffle();
         game.getPlayer().setHand(nonBustedHand);
         game.getDealer().setHand(bustedHand);
