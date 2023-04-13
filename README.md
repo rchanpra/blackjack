@@ -46,11 +46,11 @@ result, I am rather passionate about it. Therefore, this project could also be c
 ## Citation
 
 - The basis of the persistence module has been adapted from the CPSC210 team's work. You can find their code here:
-https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.
 - The PNG files of playing cards were taken from an open source archive, which is located at the following URL:
 https://code.google.com/archive/p/vector-playing-cards/.
 - Event and EventLog along with their tests have been adapted from the CPSC210 team's work at the following URL:
-https://github.students.cs.ubc.ca/CPSC210/AlarmSystem
+https://github.students.cs.ubc.ca/CPSC210/AlarmSystem.
 
 ## Instructions for Grader
 
@@ -114,4 +114,4 @@ organized. However, since I am utilizing the Swing UI Designer or GUI Form, this
 Form as a tradeoff. This is not necessarily a bad tradeoff, but it would make it more complicated when adding new 
 JPanel objects. It would also require a lot of work and time to make this happen as I would have to put a lot of effort 
 into keeping the current look of the GUI console the same even without GUI Form, which would require a lot of more 
-method calls.
+method calls. 
